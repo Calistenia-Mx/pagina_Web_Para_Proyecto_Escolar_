@@ -1,4 +1,9 @@
-// 1. DATOS (CAMBIA ESTOS LINKS POR TUS IMÁGENES)
+// ============================================
+// KIVY STREET - SCRIPT PRINCIPAL
+// CON FUNCIONALIDADES DE LOGIN/PAYPAL + MEJORAS DINÁMICAS
+// ============================================
+
+// 1. DATOS DE PRODUCTOS (TUS IMÁGENES ORIGINALES)
 const productos = [
     { id: 1, nombre: "KIVY Black Snapback", precio: 35.00, img: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=500" },
     { id: 2, nombre: "Urban Crimson", precio: 29.00, img: "https://images.unsplash.com/photo-1521369909029-2afed882baee?w=500" },
@@ -17,6 +22,7 @@ const heroImages = [
 let carrito = [];
 let index = 0;
 let heroIndex = 0;
+let currentQuickViewId = null; // Para vista rápida
 
 // 2. ELEMENTOS DEL DOM
 const track = document.getElementById('track');
@@ -27,7 +33,7 @@ const registerModal = document.getElementById('register-modal');
 const userIcon = document.getElementById('user-icon');
 const userDropdown = document.getElementById('user-dropdown');
 
-// 3. CARRUSEL HERO
+// 3. CARRUSEL HERO (TUS FUNCIONES ORIGINALES)
 function initHero() {
     heroImages.forEach(src => {
         const img = document.createElement('img');
@@ -41,21 +47,7 @@ function initHero() {
     }, 5000);
 }
 
-// 4. CARGAR PRODUCTOS
-function loadProducts() {
-    productos.forEach(p => {
-        const div = document.createElement('div');
-        div.className = 'card';
-        div.innerHTML = `
-            <img src="${p.img}" alt="${p.nombre}">
-            <h3>${p.nombre}</h3>
-            <p>$${p.precio.toFixed(2)}</p>
-            <button class="add-btn" onclick="addToCart(${p.id})">Añadir al Carrito</button>
-        `;
-        track.appendChild(div);
-    });
-}
-
+// 4. FUNCIÓN PARA ACTUALIZAR CARRUSEL (TUS FUNCIONES ORIGINALES)
 function updateCarousel() {
     const card = document.querySelector('.card');
     if(!card) return;
@@ -73,13 +65,20 @@ document.getElementById('prevBtn').onclick = () => {
     updateCarousel(); 
 };
 
-// 5. FUNCIONALIDAD DEL CARRITO
+// 5. FUNCIONALIDAD DEL CARRITO (TUS FUNCIONES ORIGINALES MEJORADAS)
 function addToCart(id) {
     const p = productos.find(item => item.id === id);
     carrito.push(p);
     renderCart();
     cartSidebar.classList.add('open');
     mostrarNotificacion(`${p.nombre} añadido al carrito`, 'info');
+    
+    // Efecto visual en el icono del carrito (MEJORA)
+    const cartIcon = document.getElementById('cart-icon');
+    cartIcon.style.transform = 'scale(1.2)';
+    setTimeout(() => {
+        cartIcon.style.transform = 'scale(1)';
+    }, 200);
 }
 
 function renderCart() {
@@ -109,7 +108,7 @@ function removeFromCart(i) {
     mostrarNotificacion(`${item.nombre} removido del carrito`, 'error');
 }
 
-// 6. PAYPAL
+// 6. PAYPAL (TU FUNCIÓN ORIGINAL)
 paypal.Buttons({
     style: { color: 'black', shape: 'rect' },
     createOrder: function(data, actions) {
@@ -133,7 +132,7 @@ paypal.Buttons({
     }
 }).render('#paypal-button-container');
 
-// 7. SISTEMA DE USUARIOS Y PHP
+// 7. SISTEMA DE USUARIOS (TUS FUNCIONES ORIGINALES)
 
 // Función para mostrar notificaciones
 function mostrarNotificacion(mensaje, tipo = 'success') {
@@ -207,7 +206,7 @@ registerModal.onclick = (e) => {
     }
 };
 
-// 8. FUNCIONES PARA CONECTAR CON PHP
+// 8. FUNCIONES PARA CONECTAR CON PHP (TUS FUNCIONES ORIGINALES)
 
 // Registrar usuario
 document.getElementById('register-form').onsubmit = async (e) => {
@@ -303,30 +302,6 @@ function logout() {
         });
 }
 
-// 9. INICIALIZACIÓN
-window.onload = () => {
-    // Cargar productos y hero
-    loadProducts();
-    initHero();
-    
-    // Carrito
-    document.getElementById('cart-icon').onclick = () => cartSidebar.classList.add('open');
-    document.getElementById('close-cart').onclick = () => cartSidebar.classList.remove('open');
-    
-    // Usuario
-    userIcon.onclick = (e) => {
-        e.stopPropagation();
-        toggleUserMenu();
-    };
-    
-    // Verificar sesión al cargar
-    checkSession();
-    
-    // Asegurar que el body tenga scroll
-    document.body.style.overflow = "auto";
-    document.body.style.overflowX = "hidden";
-};
-
 // Verificar si hay sesión activa
 function checkSession() {
     fetch('check_session.php')
@@ -343,4 +318,596 @@ function checkSession() {
             }
         })
         .catch(error => console.error('Error checking session:', error));
+}
+
+// ============================================
+// 🌟 NUEVAS MEJORAS DINÁMICAS (SIN AFECTAR LO ANTERIOR)
+// ============================================
+
+// 9. ESTILOS DINÁMICOS
+function agregarEstilosDinamicos() {
+    const estilosMejorados = `
+        /* FILTROS */
+        .filtros-container {
+            display: flex;
+            gap: 15px;
+            margin: 30px auto 50px;
+            max-width: 1200px;
+            padding: 0 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .filtro-input, .filtro-select {
+            padding: 12px 20px;
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 30px;
+            font-size: 14px;
+            color: white;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 200px;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+        }
+        
+        .filtro-input:focus, .filtro-select:focus {
+            border-color: #ff3e3e;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 62, 62, 0.2);
+        }
+        
+        .filtro-input::placeholder {
+            color: #666;
+        }
+        
+        /* CARDS ANIMADAS */
+        .card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            animation: fadeInScale 0.5s ease forwards;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: #ff3e3e;
+            box-shadow: 0 20px 30px rgba(255, 62, 62, 0.15);
+        }
+        
+        .card img {
+            transition: transform 0.5s ease;
+            cursor: pointer;
+        }
+        
+        .card:hover img {
+            transform: scale(1.08);
+        }
+        
+        /* BOTONES DE CARD */
+        .card-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .card-buttons .add-btn {
+            flex: 1;
+        }
+        
+        .quick-view-btn {
+            background: transparent;
+            border: 1px solid #444;
+            color: white;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .quick-view-btn:hover {
+            background: #ff3e3e;
+            border-color: #ff3e3e;
+            transform: scale(1.05);
+        }
+        
+        /* VISTA RÁPIDA MODAL */
+        #quick-view-modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .quick-view-content {
+            background: #1a1a1a;
+            padding: 40px;
+            border: 2px solid #ff3e3e;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 900px;
+            position: relative;
+            animation: modalPop 0.3s ease;
+        }
+        
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .quick-view-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .quick-view-image {
+            border-radius: 8px;
+            overflow: hidden;
+            background: #000;
+        }
+        
+        .quick-view-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .quick-view-details {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .quick-view-details h2 {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #ff3e3e;
+        }
+        
+        .quick-view-price {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 20px 0;
+            color: white;
+        }
+        
+        .quick-view-description {
+            color: #aaa;
+            line-height: 1.6;
+            margin: 20px 0;
+            font-size: 1rem;
+        }
+        
+        .close-quick-view {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            font-size: 35px;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            line-height: 1;
+        }
+        
+        .close-quick-view:hover {
+            color: #ff3e3e;
+        }
+        
+        /* NO RESULTADOS */
+        .no-resultados {
+            text-align: center;
+            padding: 60px;
+            font-size: 1.2rem;
+            color: #666;
+            width: 100%;
+            background: #1a1a1a;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+        
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .quick-view-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-view-details h2 {
+                font-size: 1.5rem;
+            }
+            
+            .quick-view-price {
+                font-size: 1.5rem;
+            }
+            
+            .filtros-container {
+                flex-direction: column;
+            }
+            
+            .filtro-input, .filtro-select {
+                width: 100%;
+            }
+        }
+    `;
+    
+    const style = document.createElement('style');
+    style.textContent = estilosMejorados;
+    document.head.appendChild(style);
+}
+
+// 10. RENDERIZAR PRODUCTOS CON MEJORAS
+function renderizarProductosMejorado(productosAMostrar) {
+    track.innerHTML = '';
+    
+    productosAMostrar.forEach((p, index) => {
+        const div = document.createElement('div');
+        div.className = 'card';
+        div.style.animationDelay = `${index * 0.05}s`;
+        
+        div.innerHTML = `
+            <img src="${p.img}" alt="${p.nombre}" loading="lazy" onclick="showQuickViewMejorado(${p.id})">
+            <h3>${p.nombre}</h3>
+            <p>$${p.precio.toFixed(2)}</p>
+            <div class="card-buttons">
+                <button class="add-btn" onclick="addToCart(${p.id})">🛒 Añadir</button>
+                <button class="quick-view-btn" onclick="showQuickViewMejorado(${p.id})" title="Vista rápida">👁️</button>
+            </div>
+        `;
+        track.appendChild(div);
+    });
+    
+    if (productosAMostrar.length === 0) {
+        track.innerHTML = '<div class="no-resultados">😕 No se encontraron productos</div>';
+    }
+    
+    updateCarousel();
+}
+
+// 11. FILTROS MEJORADOS
+function crearFiltrosMejorados() {
+    // Verificar si ya existen filtros
+    if (document.querySelector('.filtros-container')) return;
+    
+    const filtrosHTML = `
+        <div class="filtros-container">
+            <input type="text" id="busqueda" class="filtro-input" placeholder="🔍 Buscar por nombre...">
+            <select id="filtro-precio" class="filtro-select">
+                <option value="0">💰 Todos los precios</option>
+                <option value="25">💵 Hasta $25</option>
+                <option value="35">💵 Hasta $35</option>
+                <option value="50">💵 Hasta $50</option>
+                <option value="100">💵 Hasta $100</option>
+            </select>
+            <select id="ordenar" class="filtro-select">
+                <option value="default">📊 Ordenar por</option>
+                <option value="menor">💰 Menor precio</option>
+                <option value="mayor">💰 Mayor precio</option>
+                <option value="az">📝 A-Z</option>
+                <option value="za">📝 Z-A</option>
+            </select>
+        </div>
+    `;
+    
+    const carruselContainer = document.querySelector('.carousel-container');
+    carruselContainer.insertAdjacentHTML('afterbegin', filtrosHTML);
+    
+    // Event listeners
+    document.getElementById('busqueda').addEventListener('input', aplicarFiltrosMejorados);
+    document.getElementById('filtro-precio').addEventListener('change', aplicarFiltrosMejorados);
+    document.getElementById('ordenar').addEventListener('change', aplicarFiltrosMejorados);
+}
+
+// 12. APLICAR FILTROS
+function aplicarFiltrosMejorados() {
+    const busqueda = document.getElementById('busqueda').value.toLowerCase();
+    const precio = parseFloat(document.getElementById('filtro-precio').value);
+    const orden = document.getElementById('ordenar').value;
+    
+    let productosFiltrados = productos.filter(p => 
+        p.nombre.toLowerCase().includes(busqueda)
+    );
+    
+    if (precio > 0) {
+        productosFiltrados = productosFiltrados.filter(p => p.precio <= precio);
+    }
+    
+    // Ordenar
+    switch(orden) {
+        case 'menor':
+            productosFiltrados.sort((a, b) => a.precio - b.precio);
+            break;
+        case 'mayor':
+            productosFiltrados.sort((a, b) => b.precio - a.precio);
+            break;
+        case 'az':
+            productosFiltrados.sort((a, b) => a.nombre.localeCompare(b.nombre));
+            break;
+        case 'za':
+            productosFiltrados.sort((a, b) => b.nombre.localeCompare(a.nombre));
+            break;
+    }
+    
+    renderizarProductosMejorado(productosFiltrados);
+}
+
+// 13. VISTA RÁPIDA MEJORADA
+function crearVistaRapidaMejorado() {
+    if (document.getElementById('quick-view-modal')) return;
+    
+    const modalHTML = `
+        <div id="quick-view-modal">
+            <div class="quick-view-content">
+                <span class="close-quick-view">&times;</span>
+                <div class="quick-view-grid">
+                    <div class="quick-view-image">
+                        <img id="quick-view-img" src="" alt="Vista rápida">
+                    </div>
+                    <div class="quick-view-details">
+                        <h2 id="quick-view-title"></h2>
+                        <div class="quick-view-price" id="quick-view-price"></div>
+                        <p class="quick-view-description">
+                            Gorra de edición limitada KIVY STREET. Material de alta calidad, 
+                            diseño exclusivo y ajuste cómodo para uso diario.
+                        </p>
+                        <button class="add-btn" onclick="addToCart(currentQuickViewId)">🛒 Añadir al Carrito</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // Event listeners para cerrar
+    document.querySelector('.close-quick-view').onclick = () => {
+        document.getElementById('quick-view-modal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    };
+    
+    window.addEventListener('click', (e) => {
+        if (e.target === document.getElementById('quick-view-modal')) {
+            document.getElementById('quick-view-modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    });
+    
+    // Cerrar con tecla ESC
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('quick-view-modal');
+            if (modal.style.display === 'flex') {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+    });
+}
+
+function showQuickViewMejorado(id) {
+    const producto = productos.find(p => p.id === id);
+    currentQuickViewId = id;
+    
+    document.getElementById('quick-view-img').src = producto.img;
+    document.getElementById('quick-view-title').textContent = producto.nombre;
+    document.getElementById('quick-view-price').textContent = `$${producto.precio.toFixed(2)}`;
+    
+    document.getElementById('quick-view-modal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+// 14. INICIALIZACIÓN (MODIFICADA PARA INCLUIR MEJORAS)
+window.onload = function() {
+    // Tus funciones originales
+    initHero();
+    
+    // Carrito
+    document.getElementById('cart-icon').onclick = () => cartSidebar.classList.add('open');
+    document.getElementById('close-cart').onclick = () => cartSidebar.classList.remove('open');
+    
+    // Usuario
+    userIcon.onclick = (e) => {
+        e.stopPropagation();
+        toggleUserMenu();
+    };
+    
+    // Verificar sesión
+    checkSession();
+    
+    // 🌟 NUEVAS MEJORAS
+    agregarEstilosDinamicos();
+    crearVistaRapidaMejorado();
+    crearFiltrosMejorados();
+    renderizarProductosMejorado(productos); // Reemplaza a loadProducts()
+    
+    // Asegurar scroll
+    document.body.style.overflow = "auto";
+    document.body.style.overflowX = "hidden";
+
+    // Nueva navegación hover
+    ocultarBotonesOriginales();
+    agregarEstilosNavegacionHover();
+    crearNavegacionHover();
+    
+    console.log(' KIVY STREET - Versión Mejorada cargada!');
+};
+
+// ============================================
+// NUEVA NAVEGACIÓN POR HOVER EN LOS BORDES
+// ============================================
+
+function crearNavegacionHover() {
+    // Crear los indicadores visuales de navegación
+    const navLeft = document.createElement('div');
+    const navRight = document.createElement('div');
+    
+    navLeft.className = 'nav-hover-left';
+    navRight.className = 'nav-hover-right';
+    
+    navLeft.innerHTML = '‹';
+    navRight.innerHTML = '›';
+    
+    // Agregar al contenedor del carrusel
+    const carouselContainer = document.querySelector('.carousel-viewport');
+    carouselContainer.style.position = 'relative';
+    carouselContainer.appendChild(navLeft);
+    carouselContainer.appendChild(navRight);
+    
+    // Variables para controlar el hover
+    let hoverInterval;
+    let hoverDirection = null;
+    
+    // Función para mover el carrusel
+    function moverCarrusel(direccion) {
+        if (direccion === 'izquierda') {
+            index = (index > 0) ? index-1 : productos.length-1;
+        } else {
+            index = (index < productos.length-1) ? index+1 : 0;
+        }
+        updateCarousel();
+    }
+    
+    // Eventos para la zona izquierda
+    navLeft.addEventListener('mouseenter', () => {
+        hoverDirection = 'izquierda';
+        moverCarrusel('izquierda'); // Movimiento inmediato al entrar
+        hoverInterval = setInterval(() => {
+            moverCarrusel('izquierda');
+        }, 800); // Movimiento cada 800ms mientras mantenga el cursor
+    });
+    
+    navLeft.addEventListener('mouseleave', () => {
+        clearInterval(hoverInterval);
+        hoverDirection = null;
+    });
+    
+    // Eventos para la zona derecha
+    navRight.addEventListener('mouseenter', () => {
+        hoverDirection = 'derecha';
+        moverCarrusel('derecha'); // Movimiento inmediato al entrar
+        hoverInterval = setInterval(() => {
+            moverCarrusel('derecha');
+        }, 800);
+    });
+    
+    navRight.addEventListener('mouseleave', () => {
+        clearInterval(hoverInterval);
+        hoverDirection = null;
+    });
+    
+    // También permitir clic como alternativa
+    navLeft.addEventListener('click', () => moverCarrusel('izquierda'));
+    navRight.addEventListener('click', () => moverCarrusel('derecha'));
+}
+
+// Agregar los estilos para las zonas de navegación
+function agregarEstilosNavegacionHover() {
+    const estilosNavegacion = `
+        .nav-hover-left, .nav-hover-right {
+            position: absolute;
+            top: 0;
+            width: 100px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            background: linear-gradient(to right, rgba(0,0,0,0.5), transparent);
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+            user-select: none;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255,62,62,0.5);
+        }
+        
+        .nav-hover-right {
+            right: 0;
+            background: linear-gradient(to left, rgba(0,0,0,0.5), transparent);
+        }
+        
+        .carousel-viewport:hover .nav-hover-left,
+        .carousel-viewport:hover .nav-hover-right {
+            opacity: 1;
+        }
+        
+        .nav-hover-left:hover, .nav-hover-right:hover {
+            background: linear-gradient(to right, rgba(255,62,62,0.3), transparent);
+            color: var(--primary);
+            opacity: 1;
+        }
+        
+        .nav-hover-right:hover {
+            background: linear-gradient(to left, rgba(255,62,62,0.3), transparent);
+        }
+        
+        /* Animación de pulso para indicar que pueden hacer clic/hover */
+        @keyframes pulseNav {
+            0% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+            100% { opacity: 0.3; }
+        }
+        
+        .carousel-viewport:not(:hover) .nav-hover-left,
+        .carousel-viewport:not(:hover) .nav-hover-right {
+            animation: pulseNav 2s infinite;
+            opacity: 0.3;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-hover-left, .nav-hover-right {
+                width: 60px;
+                font-size: 2rem;
+            }
+        }
+    `;
+    
+    const style = document.createElement('style');
+    style.textContent = estilosNavegacion;
+    document.head.appendChild(style);
+}
+
+// OCULTAR LOS BOTONES PREV Y NEXT ORIGINALES
+function ocultarBotonesOriginales() {
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    
+    if (prevBtn && nextBtn) {
+        prevBtn.style.display = 'none';
+        nextBtn.style.display = 'none';
+    }
 }
