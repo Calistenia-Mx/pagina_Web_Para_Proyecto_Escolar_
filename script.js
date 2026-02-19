@@ -589,7 +589,7 @@ function renderizarProductosMejorado(productosAMostrar) {
     });
     
     if (productosAMostrar.length === 0) {
-        track.innerHTML = '<div class="no-resultados">😕 No se encontraron productos</div>';
+        track.innerHTML = '<div class="no-resultados"> No se encontraron productos</div>';
     }
     
     updateCarousel();
