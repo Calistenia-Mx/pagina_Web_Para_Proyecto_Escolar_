@@ -3,14 +3,16 @@
 // CON FUNCIONALIDADES DE LOGIN/PAYPAL + MEJORAS DINÁMICAS
 // ============================================
 
-// 1. DATOS DE PRODUCTOS (TUS IMÁGENES ORIGINALES)
+// 1. DATOS DE PRODUCTOS 
 const productos = [
-    { id: 1, nombre: "KIVY Black Snapback", precio: 35.00, img: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=500" },
-    { id: 2, nombre: "Urban Crimson", precio: 29.00, img: "https://images.unsplash.com/photo-1521369909029-2afed882baee?w=500" },
-    { id: 3, nombre: "Street Ghost", precio: 40.00, img: "images 5.jpg" },
-    { id: 4, nombre: "Night Vibe Beanie", precio: 22.00, img: "https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=500" },
-    { id: 5, nombre: "KIVY Logo Tee", precio: 25.00, img: "images 2.jpg" },
-    { id: 6, nombre: "Streetwear", precio: 45.00, img: "images 3.jpg" }
+    { id: 1, nombre: "Gorra Dandy Hats", precio: 35.00, img: "images 4.jpg" },
+    { id: 2, nombre: "Gorra Thirty One", precio: 29.00, img: "images 6.jpg" },
+    { id: 3, nombre: "Gorra la ultima cena", precio: 40.00, img: "images 5.jpg" },
+    { id: 4, nombre: "Rude Awakenings Rude", precio: 22.00, img: "images 7.jpg" },
+    { id: 5, nombre: "Gorra Barbas Hats X Aleman", precio: 25.00, img: "images 2.jpg" },
+    { id: 6, nombre: "Barbas hats Chrome CT", precio: 45.00, img: "images 3.jpg" },
+    { id: 7, nombre: "Gorra 31 Hats", precio: 45.00, img: "images 8.jpg" },
+    { id: 8, nombre: "Gorra New era New York Yankees", precio: 45.00, img: "images.jpg" },
 ];
 
 const heroImages = [
@@ -33,7 +35,7 @@ const registerModal = document.getElementById('register-modal');
 const userIcon = document.getElementById('user-icon');
 const userDropdown = document.getElementById('user-dropdown');
 
-// 3. CARRUSEL HERO (TUS FUNCIONES ORIGINALES)
+// 3. CARRUSEL HERO 
 function initHero() {
     heroImages.forEach(src => {
         const img = document.createElement('img');
@@ -47,7 +49,7 @@ function initHero() {
     }, 5000);
 }
 
-// 4. FUNCIÓN PARA ACTUALIZAR CARRUSEL (TUS FUNCIONES ORIGINALES)
+// 4. FUNCIÓN PARA ACTUALIZAR CARRUSEL 
 function updateCarousel() {
     const card = document.querySelector('.card');
     if(!card) return;
@@ -65,7 +67,7 @@ document.getElementById('prevBtn').onclick = () => {
     updateCarousel(); 
 };
 
-// 5. FUNCIONALIDAD DEL CARRITO (TUS FUNCIONES ORIGINALES MEJORADAS)
+// 5. FUNCIONALIDAD DEL CARRITO 
 function addToCart(id) {
     const p = productos.find(item => item.id === id);
     carrito.push(p);
@@ -73,7 +75,7 @@ function addToCart(id) {
     cartSidebar.classList.add('open');
     mostrarNotificacion(`${p.nombre} añadido al carrito`, 'info');
     
-    // Efecto visual en el icono del carrito (MEJORA)
+    // Efecto visual en el icono del carrito 
     const cartIcon = document.getElementById('cart-icon');
     cartIcon.style.transform = 'scale(1.2)';
     setTimeout(() => {
@@ -108,7 +110,7 @@ function removeFromCart(i) {
     mostrarNotificacion(`${item.nombre} removido del carrito`, 'error');
 }
 
-// 6. PAYPAL (TU FUNCIÓN ORIGINAL)
+// 6. PAYPAL 
 paypal.Buttons({
     style: { color: 'black', shape: 'rect' },
     createOrder: function(data, actions) {
@@ -132,7 +134,7 @@ paypal.Buttons({
     }
 }).render('#paypal-button-container');
 
-// 7. SISTEMA DE USUARIOS (TUS FUNCIONES ORIGINALES)
+// 7. SISTEMA DE USUARIOS 
 
 // Función para mostrar notificaciones
 function mostrarNotificacion(mensaje, tipo = 'success') {
@@ -206,7 +208,7 @@ registerModal.onclick = (e) => {
     }
 };
 
-// 8. FUNCIONES PARA CONECTAR CON PHP (TUS FUNCIONES ORIGINALES)
+// 8. FUNCIONES PARA CONECTAR CON PHP 
 
 // Registrar usuario
 document.getElementById('register-form').onsubmit = async (e) => {
@@ -321,7 +323,7 @@ function checkSession() {
 }
 
 // ============================================
-// 🌟 NUEVAS MEJORAS DINÁMICAS (SIN AFECTAR LO ANTERIOR)
+// NUEVAS MEJORAS DINÁMICAS (SIN AFECTAR LO ANTERIOR)
 // ============================================
 
 // 9. ESTILOS DINÁMICOS
@@ -604,14 +606,14 @@ function crearFiltrosMejorados() {
         <div class="filtros-container">
             <input type="text" id="busqueda" class="filtro-input" placeholder="🔍 Buscar por nombre...">
             <select id="filtro-precio" class="filtro-select">
-                <option value="0">💰 Todos los precios</option>
+                <option value="0">Todos los precios</option>
                 <option value="25">💵 Hasta $25</option>
                 <option value="35">💵 Hasta $35</option>
                 <option value="50">💵 Hasta $50</option>
                 <option value="100">💵 Hasta $100</option>
             </select>
             <select id="ordenar" class="filtro-select">
-                <option value="default">📊 Ordenar por</option>
+                <option value="default">Ordenar por</option>
                 <option value="menor">💰 Menor precio</option>
                 <option value="mayor">💰 Mayor precio</option>
                 <option value="az">📝 A-Z</option>
@@ -745,7 +747,7 @@ window.onload = function() {
     // Verificar sesión
     checkSession();
     
-    // 🌟 NUEVAS MEJORAS
+    //  NUEVAS MEJORAS
     agregarEstilosDinamicos();
     crearVistaRapidaMejorado();
     crearFiltrosMejorados();

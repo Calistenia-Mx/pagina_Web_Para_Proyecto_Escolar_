@@ -213,3 +213,54 @@ footer { padding: 50px 8%; background: #000; text-align: center; border-top: 1px
     .notificacion { min-width: 90%; left: 5%; right: 5%; }
     body { overflow-x: hidden; }
 }
+
+/* ================= SECCION GORRAS ================= */
+
+.gorras-section {
+    padding: 120px 8%;
+    background: #0a0a0a;
+    text-align: center;
+}
+
+.gorras-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap: 25px;
+    margin-top: 40px;
+}
+
+.gorra-card {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    padding: 20px;
+    transition: 0.3s;
+}
+
+.gorra-card img {
+    width: 100%;
+    height: 230px;
+    object-fit: cover;
+}
+
+.gorra-card:hover {
+    transform: translateY(-8px);
+    border-color: #ff3e3e;
+}
+
+/* ================= FOOTER REDES ================= */
+
+.footer-social {
+    margin-bottom: 15px;
+}
+
+.footer-social a {
+    color: white;
+    margin: 0 12px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: 0.3s;
+}
+
+.footer-social a:hover {
+    color: #ff3e3e;
+}
