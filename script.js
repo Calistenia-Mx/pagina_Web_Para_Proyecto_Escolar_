@@ -5,7 +5,7 @@
 
 // 1. DATOS DE PRODUCTOS 
 const productos = [
-    { id: 1, nombre: "KIVY Black Snapback", precio: 35.00, img: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=500" },
+    { id: 1, nombre: "KIVY Black Snapback", precio: 35.00, img: "images 4.jpg" },
     { id: 2, nombre: "Urban Crimson", precio: 29.00, img: "https://images.unsplash.com/photo-1521369909029-2afed882baee?w=500" },
     { id: 3, nombre: "Street Ghost", precio: 40.00, img: "images 5.jpg" },
     { id: 4, nombre: "Night Vibe Beanie", precio: 22.00, img: "https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=500" },
