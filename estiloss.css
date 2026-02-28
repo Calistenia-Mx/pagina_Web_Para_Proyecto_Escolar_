@@ -93,6 +93,7 @@ body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sa
 .about-section { padding: 100px 8%; background: #0f0f0f; }
 .about-container { margin-bottom: 80px; display: flex; align-items: center; gap: 50px; flex-wrap: wrap; }
 .about-text { flex: 1; min-width: 300px; }
+.valores-lista { list-style: none; padding: 0; display: flex; gap: 20px; flex-wrap: wrap;}
 .section-title { font-family: 'Syncopate'; font-size: 2rem; margin-bottom: 30px; }
 .about-image img { width: 100%; border-radius: 8px; filter: grayscale(1); }
 .social-links a { color: var(--primary); text-decoration: none; margin-right: 20px; font-weight: bold; text-transform: uppercase; font-size: 0.8rem; }
