@@ -5,12 +5,14 @@
 
 // 1. DATOS DE PRODUCTOS 
 const productos = [
-    { id: 1, nombre: "KIVY Black Snapback", precio: 35.00, img: "images 4.jpg" },
-    { id: 2, nombre: "Urban Crimson", precio: 29.00, img: "https://images.unsplash.com/photo-1521369909029-2afed882baee?w=500" },
-    { id: 3, nombre: "Street Ghost", precio: 40.00, img: "images 5.jpg" },
-    { id: 4, nombre: "Night Vibe Beanie", precio: 22.00, img: "https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=500" },
-    { id: 5, nombre: "KIVY Logo Tee", precio: 25.00, img: "images 2.jpg" },
-    { id: 6, nombre: "Streetwear", precio: 45.00, img: "images 3.jpg" }
+    { id: 1, nombre: "Gorra Dandy Hats", precio: 35.00, img: "images 4.jpg" },
+    { id: 2, nombre: "Gorra Thirty One", precio: 29.00, img: "images 6.jpg" },
+    { id: 3, nombre: "Gorra la ultima cena", precio: 40.00, img: "images 5.jpg" },
+    { id: 4, nombre: "Rude Awakenings Rude", precio: 22.00, img: "images 7.jpg" },
+    { id: 5, nombre: "Gorra Barbas Hats X Aleman", precio: 25.00, img: "images 2.jpg" },
+    { id: 6, nombre: "Barbas hats Chrome CT", precio: 45.00, img: "images 3.jpg" },
+    { id: 7, nombre: "Gorra 31 Hats", precio: 45.00, img: "images 8.jpg" },
+    { id: 8, nombre: "Gorra New era New York Yankees", precio: 45.00, img: "images.jpg" },
 ];
 
 const heroImages = [
@@ -589,7 +591,7 @@ function renderizarProductosMejorado(productosAMostrar) {
     });
     
     if (productosAMostrar.length === 0) {
-        track.innerHTML = '<div class="no-resultados"> No se encontraron productos</div>';
+        track.innerHTML = '<div class="no-resultados">😕 No se encontraron productos</div>';
     }
     
     updateCarousel();
@@ -604,18 +606,18 @@ function crearFiltrosMejorados() {
         <div class="filtros-container">
             <input type="text" id="busqueda" class="filtro-input" placeholder="🔍 Buscar por nombre...">
             <select id="filtro-precio" class="filtro-select">
-                <option value="0"> Todos los precios</option>
-                <option value="25"> Hasta $25</option>
-                <option value="35"> Hasta $35</option>
-                <option value="50"> Hasta $50</option>
-                <option value="100"> Hasta $100</option>
+                <option value="0">Todos los precios</option>
+                <option value="25">💵 Hasta $25</option>
+                <option value="35">💵 Hasta $35</option>
+                <option value="50">💵 Hasta $50</option>
+                <option value="100">💵 Hasta $100</option>
             </select>
             <select id="ordenar" class="filtro-select">
-                <option value="default"> Ordenar por</option>
-                <option value="menor"> Menor precio</option>
-                <option value="mayor"> Mayor precio</option>
-                <option value="az"> A-Z</option>
-                <option value="za"> Z-A</option>
+                <option value="default">Ordenar por</option>
+                <option value="menor">💰 Menor precio</option>
+                <option value="mayor">💰 Mayor precio</option>
+                <option value="az">📝 A-Z</option>
+                <option value="za">📝 Z-A</option>
             </select>
         </div>
     `;
@@ -911,3 +913,4 @@ function ocultarBotonesOriginales() {
         nextBtn.style.display = 'none';
     }
 }
+
