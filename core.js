@@ -352,7 +352,7 @@ function checkSession() {
         })
         .catch(error => console.error('Error checking session:', error));
 }
-
+//para que funcione el banner de hero y el sistema de usuarios en todas las páginas, no solo en home.html. Si quieres código específico para otras páginas, hazlo en archivos separados como about.js, contact.js, etc. y enlázalos solo en esas páginas.
 document.addEventListener("DOMContentLoaded", function () {
     initHero();
     checkSession();
