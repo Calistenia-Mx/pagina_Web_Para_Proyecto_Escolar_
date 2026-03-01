@@ -13,6 +13,7 @@ const productos = [
     { id: 6, nombre: "Barbas hats Chrome CT", precio: 45.00, img: "images 3.jpg" },
     { id: 7, nombre: "Gorra 31 Hats", precio: 45.00, img: "images 8.jpg" },
     { id: 8, nombre: "Gorra New era New York Yankees", precio: 45.00, img: "images.jpg" },
+    
 ];
 
 const heroImages = [
