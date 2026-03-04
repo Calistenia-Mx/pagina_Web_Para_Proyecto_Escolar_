@@ -13,7 +13,6 @@ const productos = [
     { id: 6, nombre: "Barbas hats Chrome CT", precio: 45.00, img: "images 3.jpg" },
     { id: 7, nombre: "Gorra 31 Hats", precio: 45.00, img: "images 8.jpg" },
     { id: 8, nombre: "Gorra New era New York Yankees", precio: 45.00, img: "images.jpg" },
-    
 ];
 
 const heroImages = [
@@ -914,16 +913,3 @@ function ocultarBotonesOriginales() {
         nextBtn.style.display = 'none';
     }
 }
-// Para que funcione el menú desplegable en móvil
-document.addEventListener('DOMContentLoaded', function() {
-    const dropdowns = document.querySelectorAll('.dropdown');
-    
-    dropdowns.forEach(dropdown => {
-        dropdown.addEventListener('click', function(e) {
-            if (window.innerWidth <= 768) {
-                e.preventDefault();
-                this.classList.toggle('active');
-            }
-        });
-    });
-});
