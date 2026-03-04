@@ -914,3 +914,16 @@ function ocultarBotonesOriginales() {
         nextBtn.style.display = 'none';
     }
 }
+// Para que funcione el menú desplegable en móvil
+document.addEventListener('DOMContentLoaded', function() {
+    const dropdowns = document.querySelectorAll('.dropdown');
+    
+    dropdowns.forEach(dropdown => {
+        dropdown.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                this.classList.toggle('active');
+            }
+        });
+    });
+});
