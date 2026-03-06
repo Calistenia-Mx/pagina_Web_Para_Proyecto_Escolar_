@@ -1,9 +1,8 @@
 // ============================================
 // KIVY STREET - SCRIPT PRINCIPAL
-// CON FUNCIONALIDADES DE LOGIN/PAYPAL + MEJORAS DINÁMICAS
+// CON FUNCIONALIDADES DE LOGIN + MERCADO PAGO
 // ============================================
 
-// 1. DATOS DE PRODUCTOS 
 const productos = [
     { id: 1, nombre: "Gorra Dandy Hats", precio: 35.00, img: "images 4.jpg" },
     { id: 2, nombre: "Gorra Thirty One", precio: 29.00, img: "images 6.jpg" },
@@ -11,20 +10,23 @@ const productos = [
     { id: 4, nombre: "Rude Awakenings Rude", precio: 22.00, img: "images 7.jpg" },
     { id: 5, nombre: "Gorra Barbas Hats X Aleman", precio: 25.00, img: "images 2.jpg" },
     { id: 6, nombre: "Barbas hats Chrome CT", precio: 45.00, img: "images 3.jpg" },
-    { id: 7, nombre: "Gorra 31 Hats", precio: 45.00, img: "images 8.jpg" },
+    { id: 7, nombre: "Gorra Dandy Hats Clave Ali", precio: 45.00, img: "imagen8.jpg" },
     { id: 8, nombre: "Gorra New era New York Yankees", precio: 45.00, img: "images.jpg" },
+    // NUEVOS PRODUCTOS AGREGADOS
+    { id: 9, nombre: "Dandy Hats x Junior H", precio: 39.00, img: "imagen11.jpg" },
+    { id: 10, nombre: "Barbas Hats Ba", precio: 42.00, img: "imagen12.jpg" },
+    { id: 11, nombre: "Gorra Jc Hats", precio: 48.00, img: "imagen13.jpg" },
 ];
-
 const heroImages = [
     "https://images.unsplash.com/photo-1534215754734-18e55d13e346?q=80&w=2000",
     "https://images.unsplash.com/photo-1620799140188-3b2a0c66ab80?q=80&w=2000",
-    "https://images.unsplash.com/photo-1620799140384-ce45cece1066?q=80&w=2000"
+    "https://images.unsplash.com/photo-1620799140384-ce45cece1066?q=80&w=2000",
 ];
 
 let carrito = [];
 let index = 0;
 let heroIndex = 0;
-let currentQuickViewId = null; // Para vista rápida
+let currentQuickViewId = null;
 
 // 2. ELEMENTOS DEL DOM
 const track = document.getElementById('track');
@@ -40,7 +42,7 @@ function initHero() {
     heroImages.forEach(src => {
         const img = document.createElement('img');
         img.src = src;
-        img.alt = "KIVY STREET Hero Image";
+        img.alt = "KIVY STREET";
         heroCarousel.appendChild(img);
     });
     setInterval(() => {
@@ -65,6 +67,91 @@ document.getElementById('nextBtn').onclick = () => {
 document.getElementById('prevBtn').onclick = () => { 
     index = (index > 0) ? index-1 : productos.length-1; 
     updateCarousel(); 
+    // MEJORA: CARRUSEL INFINITO CON MÁS PRODUCTOS
+function mejorarCarruselInfinito() {
+    // Hacer que el carrusel sea infinito
+    const track = document.getElementById('track');
+    const totalProductos = productos.length;
+    
+    // Clonar primeros y últimos productos para efecto infinito
+    const primerosProductos = productos.slice(0, 3);
+    const ultimosProductos = productos.slice(-3);
+    
+    primerosProductos.forEach(p => {
+        const clone = document.createElement('div');
+        clone.className = 'card clone';
+        clone.innerHTML = `
+            <img src="${p.img}" alt="${p.nombre}" loading="lazy">
+            <h3>${p.nombre}</h3>
+            <p>$${p.precio.toFixed(2)}</p>
+            <div class="card-buttons">
+                <button class="add-btn" onclick="addToCart(${p.id})">🛒 Añadir</button>
+                <button class="quick-view-btn" onclick="showQuickViewMejorado(${p.id})">👁️</button>
+            </div>
+        `;
+        track.appendChild(clone);
+    });
+    
+    // Agregar indicador de página
+    const indicador = document.createElement('div');
+    indicador.className = 'carrusel-indicador';
+    indicador.innerHTML = `<span class="producto-actual">1</span> / <span class="producto-total">${totalProductos}</span>`;
+    
+    const controles = document.querySelector('.carousel-controls');
+    controles.appendChild(indicador);
+    
+    // Estilos para el indicador
+    const estiloIndicador = `
+        .carrusel-indicador {
+            color: #888;
+            font-size: 0.9rem;
+            margin-left: 20px;
+            padding: 10px 15px;
+            background: #1a1a1a;
+            border-radius: 20px;
+            border: 1px solid #333;
+        }
+        
+        .producto-actual {
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .producto-total {
+            color: #666;
+        }
+        
+        .clone {
+            opacity: 0.7;
+        }
+        
+        .clone:hover {
+            opacity: 1;
+        }
+    `;
+    
+    const style = document.createElement('style');
+    style.textContent = estiloIndicador;
+    document.head.appendChild(style);
+}
+
+// ACTUALIZAR EL INDICADOR CUANDO CAMBIA EL CARRUSEL
+function actualizarIndicador() {
+    const indicadorActual = document.querySelector('.producto-actual');
+    if (indicadorActual) {
+        let posActual = index + 1;
+        if (posActual > productos.length) posActual = 1;
+        if (posActual < 1) posActual = productos.length;
+        indicadorActual.textContent = posActual;
+    }
+}
+
+// Modificar la función updateCarousel existente para actualizar el indicador
+const updateCarouselOriginal = updateCarousel;
+updateCarousel = function() {
+    updateCarouselOriginal();
+    actualizarIndicador();
+};
 };
 
 // 5. FUNCIONALIDAD DEL CARRITO 
@@ -75,7 +162,6 @@ function addToCart(id) {
     cartSidebar.classList.add('open');
     mostrarNotificacion(`${p.nombre} añadido al carrito`, 'info');
     
-    // Efecto visual en el icono del carrito 
     const cartIcon = document.getElementById('cart-icon');
     cartIcon.style.transform = 'scale(1.2)';
     setTimeout(() => {
@@ -101,6 +187,11 @@ function renderCart() {
     });
     document.getElementById('cart-count').innerText = carrito.length;
     document.getElementById('cart-total').innerText = `$${total.toFixed(2)}`;
+
+    // Inicializar Mercado Pago después de renderizar el carrito
+    setTimeout(() => {
+        inicializarMercadoPago();
+    }, 100);
 }
 
 function removeFromCart(i) { 
@@ -110,35 +201,9 @@ function removeFromCart(i) {
     mostrarNotificacion(`${item.nombre} removido del carrito`, 'error');
 }
 
-// 6. PAYPAL 
-paypal.Buttons({
-    style: { color: 'black', shape: 'rect' },
-    createOrder: function(data, actions) {
-        const total = document.getElementById('cart-total').innerText.replace('$', '');
-        return actions.order.create({ 
-            purchase_units: [{ 
-                amount: { 
-                    value: total,
-                    currency_code: 'USD'
-                } 
-            }] 
-        });
-    },
-    onApprove: function(data, actions) {
-        return actions.order.capture().then(() => { 
-            mostrarNotificacion('¡Compra Exitosa! Gracias por tu compra.', 'success'); 
-            carrito = []; 
-            renderCart(); 
-            cartSidebar.classList.remove('open'); 
-        });
-    }
-}).render('#paypal-button-container');
+// 6. SISTEMA DE USUARIOS 
 
-// 7. SISTEMA DE USUARIOS 
-
-// Función para mostrar notificaciones
 function mostrarNotificacion(mensaje, tipo = 'success') {
-    // Remover notificaciones existentes
     const notificacionesExistentes = document.querySelectorAll('.notificacion');
     notificacionesExistentes.forEach(n => n.remove());
     
@@ -158,33 +223,28 @@ function mostrarNotificacion(mensaje, tipo = 'success') {
     }, 5000);
 }
 
-// Menú desplegable de usuario
 function toggleUserMenu() {
     userDropdown.classList.toggle('show');
 }
 
-// Cerrar menú al hacer clic fuera
 document.addEventListener('click', (e) => {
     if (!userIcon.contains(e.target) && !userDropdown.contains(e.target)) {
         userDropdown.classList.remove('show');
     }
 });
 
-// Mostrar modal de login
 function showLoginModal() {
     loginModal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
     userDropdown.classList.remove('show');
 }
 
-// Mostrar modal de registro
 function showRegisterModal() {
     registerModal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
     userDropdown.classList.remove('show');
 }
 
-// Cerrar modales
 function closeLoginModal() {
     loginModal.style.display = 'none';
     document.body.style.overflow = 'auto';
@@ -195,7 +255,6 @@ function closeRegisterModal() {
     document.body.style.overflow = 'auto';
 }
 
-// Cerrar modal al hacer clic fuera
 loginModal.onclick = (e) => {
     if (e.target === loginModal) {
         closeLoginModal();
@@ -208,9 +267,7 @@ registerModal.onclick = (e) => {
     }
 };
 
-// 8. FUNCIONES PARA CONECTAR CON PHP 
-
-// Registrar usuario
+// 7. FUNCIONES PARA CONECTAR CON PHP 
 document.getElementById('register-form').onsubmit = async (e) => {
     e.preventDefault();
     
@@ -229,7 +286,6 @@ document.getElementById('register-form').onsubmit = async (e) => {
             closeRegisterModal();
             e.target.reset();
             
-            // Mostrar login después de 1 segundo
             setTimeout(() => {
                 showLoginModal();
             }, 1000);
@@ -244,7 +300,6 @@ document.getElementById('register-form').onsubmit = async (e) => {
     }
 };
 
-// Iniciar sesión
 document.getElementById('login-form').onsubmit = async (e) => {
     e.preventDefault();
     
@@ -262,11 +317,9 @@ document.getElementById('login-form').onsubmit = async (e) => {
             mostrarNotificacion(`¡Bienvenido ${result.usuario.nombre}!`, 'success');
             closeLoginModal();
             
-            // Actualizar ícono de usuario
             userIcon.innerHTML = `👋`;
             userIcon.title = `Hola, ${result.usuario.nombre}`;
             
-            // Cambiar opciones del menú
             userDropdown.innerHTML = `
                 <a href="#" class="dropdown-item">Mi Perfil</a>
                 <a href="#" class="dropdown-item">Mis Pedidos</a>
@@ -283,7 +336,6 @@ document.getElementById('login-form').onsubmit = async (e) => {
     }
 };
 
-// Cerrar sesión
 function logout() {
     fetch('logout.php')
         .then(response => response.json())
@@ -304,7 +356,6 @@ function logout() {
         });
 }
 
-// Verificar si hay sesión activa
 function checkSession() {
     fetch('check_session.php')
         .then(response => response.json())
@@ -323,13 +374,11 @@ function checkSession() {
 }
 
 // ============================================
-// NUEVAS MEJORAS DINÁMICAS (SIN AFECTAR LO ANTERIOR)
+// NUEVAS MEJORAS DINÁMICAS
 // ============================================
 
-// 9. ESTILOS DINÁMICOS
 function agregarEstilosDinamicos() {
     const estilosMejorados = `
-        /* FILTROS */
         .filtros-container {
             display: flex;
             gap: 15px;
@@ -364,7 +413,6 @@ function agregarEstilosDinamicos() {
             color: #666;
         }
         
-        /* CARDS ANIMADAS */
         .card {
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             opacity: 0;
@@ -399,7 +447,6 @@ function agregarEstilosDinamicos() {
             transform: scale(1.08);
         }
         
-        /* BOTONES DE CARD */
         .card-buttons {
             display: flex;
             gap: 8px;
@@ -430,7 +477,6 @@ function agregarEstilosDinamicos() {
             transform: scale(1.05);
         }
         
-        /* VISTA RÁPIDA MODAL */
         #quick-view-modal {
             display: none;
             position: fixed;
@@ -528,7 +574,6 @@ function agregarEstilosDinamicos() {
             color: #ff3e3e;
         }
         
-        /* NO RESULTADOS */
         .no-resultados {
             text-align: center;
             padding: 60px;
@@ -540,7 +585,28 @@ function agregarEstilosDinamicos() {
             border: 1px solid #333;
         }
         
-        /* RESPONSIVE */
+        /* Estilos para el botón de Mercado Pago */
+        #mercado-pago-container {
+            margin-top: 15px;
+            width: 100%;
+        }
+        
+        .mercado-pago-button {
+            background: #009ee3 !important;
+            color: white !important;
+            border: none !important;
+            padding: 12px !important;
+            border-radius: 4px !important;
+            font-weight: bold !important;
+            cursor: pointer !important;
+            width: 100% !important;
+            transition: background 0.3s !important;
+        }
+        
+        .mercado-pago-button:hover {
+            background: #0083c7 !important;
+        }
+        
         @media (max-width: 768px) {
             .quick-view-grid {
                 grid-template-columns: 1fr;
@@ -569,7 +635,6 @@ function agregarEstilosDinamicos() {
     document.head.appendChild(style);
 }
 
-// 10. RENDERIZAR PRODUCTOS CON MEJORAS
 function renderizarProductosMejorado(productosAMostrar) {
     track.innerHTML = '';
     
@@ -583,7 +648,7 @@ function renderizarProductosMejorado(productosAMostrar) {
             <h3>${p.nombre}</h3>
             <p>$${p.precio.toFixed(2)}</p>
             <div class="card-buttons">
-                <button class="add-btn" onclick="addToCart(${p.id})">🛒 Añadir</button>
+                <button class="add-btn" onclick="addToCart(${p.id})"> Añadir</button>
                 <button class="quick-view-btn" onclick="showQuickViewMejorado(${p.id})" title="Vista rápida">👁️</button>
             </div>
         `;
@@ -597,9 +662,7 @@ function renderizarProductosMejorado(productosAMostrar) {
     updateCarousel();
 }
 
-// 11. FILTROS MEJORADOS
 function crearFiltrosMejorados() {
-    // Verificar si ya existen filtros
     if (document.querySelector('.filtros-container')) return;
     
     const filtrosHTML = `
@@ -607,17 +670,17 @@ function crearFiltrosMejorados() {
             <input type="text" id="busqueda" class="filtro-input" placeholder="🔍 Buscar por nombre...">
             <select id="filtro-precio" class="filtro-select">
                 <option value="0">Todos los precios</option>
-                <option value="25">💵 Hasta $25</option>
-                <option value="35">💵 Hasta $35</option>
-                <option value="50">💵 Hasta $50</option>
-                <option value="100">💵 Hasta $100</option>
+                <option value="25">Hasta $25</option>
+                <option value="35"> Hasta $35</option>
+                <option value="50">Hasta $50</option>
+                <option value="100">Hasta $100</option>
             </select>
             <select id="ordenar" class="filtro-select">
                 <option value="default">Ordenar por</option>
-                <option value="menor">💰 Menor precio</option>
-                <option value="mayor">💰 Mayor precio</option>
-                <option value="az">📝 A-Z</option>
-                <option value="za">📝 Z-A</option>
+                <option value="menor">Menor precio</option>
+                <option value="mayor"> Mayor precio</option>
+                <option value="az">A-Z</option>
+                <option value="za">Z-A</option>
             </select>
         </div>
     `;
@@ -625,13 +688,11 @@ function crearFiltrosMejorados() {
     const carruselContainer = document.querySelector('.carousel-container');
     carruselContainer.insertAdjacentHTML('afterbegin', filtrosHTML);
     
-    // Event listeners
     document.getElementById('busqueda').addEventListener('input', aplicarFiltrosMejorados);
     document.getElementById('filtro-precio').addEventListener('change', aplicarFiltrosMejorados);
     document.getElementById('ordenar').addEventListener('change', aplicarFiltrosMejorados);
 }
 
-// 12. APLICAR FILTROS
 function aplicarFiltrosMejorados() {
     const busqueda = document.getElementById('busqueda').value.toLowerCase();
     const precio = parseFloat(document.getElementById('filtro-precio').value);
@@ -645,7 +706,6 @@ function aplicarFiltrosMejorados() {
         productosFiltrados = productosFiltrados.filter(p => p.precio <= precio);
     }
     
-    // Ordenar
     switch(orden) {
         case 'menor':
             productosFiltrados.sort((a, b) => a.precio - b.precio);
@@ -664,7 +724,6 @@ function aplicarFiltrosMejorados() {
     renderizarProductosMejorado(productosFiltrados);
 }
 
-// 13. VISTA RÁPIDA MEJORADA
 function crearVistaRapidaMejorado() {
     if (document.getElementById('quick-view-modal')) return;
     
@@ -692,7 +751,6 @@ function crearVistaRapidaMejorado() {
     
     document.body.insertAdjacentHTML('beforeend', modalHTML);
     
-    // Event listeners para cerrar
     document.querySelector('.close-quick-view').onclick = () => {
         document.getElementById('quick-view-modal').style.display = 'none';
         document.body.style.overflow = 'auto';
@@ -705,7 +763,6 @@ function crearVistaRapidaMejorado() {
         }
     });
     
-    // Cerrar con tecla ESC
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             const modal = document.getElementById('quick-view-modal');
@@ -729,40 +786,80 @@ function showQuickViewMejorado(id) {
     document.body.style.overflow = 'hidden';
 }
 
-// 14. INICIALIZACIÓN (MODIFICADA PARA INCLUIR MEJORAS)
+// ============================================
+// FUNCIÓN: INICIALIZAR MERCADO PAGO (CORREGIDA)
+// ============================================
+function inicializarMercadoPago() {
+    // Verificar si hay productos en el carrito
+    if (carrito.length === 0) {
+        document.getElementById('mercado-pago-container').innerHTML = '<p style="color:#666; text-align:center;">Agrega productos al carrito</p>';
+        return;
+    }
+
+    // Obtener el total del carrito
+    const totalElement = document.getElementById('cart-total');
+    const totalTexto = totalElement.innerText.replace('$', '');
+    const total = parseFloat(totalTexto);
+
+    if (isNaN(total) || total <= 0) {
+        return;
+    }
+
+    // Limpiar el contenedor
+    const container = document.getElementById('mercado-pago-container');
+    container.innerHTML = '';
+
+    try {
+        // IMPORTANTE: Reemplaza este token con el tuyo REAL de Mercado Pago
+        // Para pruebas, puedes usar: TEST-123456789-123456 (ejemplo)
+        const mp = new MercadoPago('TEST-123456789-123456', {
+            locale: 'es-AR'
+        });
+
+        // Crear el botón de checkout
+        mp.checkout({
+            preference: preference,
+            render: {
+                container: '#mercado-pago-container',
+                label: 'Pagar con Mercado Pago',
+                type: 'wallet'
+            }
+        });
+
+        console.log('Mercado Pago inicializado correctamente');
+    } catch (error) {
+        console.error('Error al inicializar Mercado Pago:', error);
+        container.innerHTML = '<p style="color:#ff3e3e; text-align:center;">Error al cargar Mercado Pago</p>';
+    }
+}
+
+// 13. INICIALIZACIÓN
 window.onload = function() {
-    // Tus funciones originales
     initHero();
     
-    // Carrito
     document.getElementById('cart-icon').onclick = () => cartSidebar.classList.add('open');
     document.getElementById('close-cart').onclick = () => cartSidebar.classList.remove('open');
     
-    // Usuario
     userIcon.onclick = (e) => {
         e.stopPropagation();
         toggleUserMenu();
     };
     
-    // Verificar sesión
     checkSession();
     
-    //  NUEVAS MEJORAS
     agregarEstilosDinamicos();
     crearVistaRapidaMejorado();
     crearFiltrosMejorados();
-    renderizarProductosMejorado(productos); // Reemplaza a loadProducts()
+    renderizarProductosMejorado(productos);
     
-    // Asegurar scroll
     document.body.style.overflow = "auto";
     document.body.style.overflowX = "hidden";
 
-    // Nueva navegación hover
     ocultarBotonesOriginales();
     agregarEstilosNavegacionHover();
     crearNavegacionHover();
     
-    console.log(' KIVY STREET - Versión Mejorada cargada!');
+    console.log('KIVY STREET - Versión con Mercado Pago cargada!');
 };
 
 // ============================================
@@ -770,7 +867,6 @@ window.onload = function() {
 // ============================================
 
 function crearNavegacionHover() {
-    // Crear los indicadores visuales de navegación
     const navLeft = document.createElement('div');
     const navRight = document.createElement('div');
     
@@ -780,17 +876,13 @@ function crearNavegacionHover() {
     navLeft.innerHTML = '‹';
     navRight.innerHTML = '›';
     
-    // Agregar al contenedor del carrusel
     const carouselContainer = document.querySelector('.carousel-viewport');
     carouselContainer.style.position = 'relative';
     carouselContainer.appendChild(navLeft);
     carouselContainer.appendChild(navRight);
     
-    // Variables para controlar el hover
     let hoverInterval;
-    let hoverDirection = null;
     
-    // Función para mover el carrusel
     function moverCarrusel(direccion) {
         if (direccion === 'izquierda') {
             index = (index > 0) ? index-1 : productos.length-1;
@@ -800,24 +892,19 @@ function crearNavegacionHover() {
         updateCarousel();
     }
     
-    // Eventos para la zona izquierda
     navLeft.addEventListener('mouseenter', () => {
-        hoverDirection = 'izquierda';
-        moverCarrusel('izquierda'); // Movimiento inmediato al entrar
+        moverCarrusel('izquierda');
         hoverInterval = setInterval(() => {
             moverCarrusel('izquierda');
-        }, 800); // Movimiento cada 800ms mientras mantenga el cursor
+        }, 800);
     });
     
     navLeft.addEventListener('mouseleave', () => {
         clearInterval(hoverInterval);
-        hoverDirection = null;
     });
     
-    // Eventos para la zona derecha
     navRight.addEventListener('mouseenter', () => {
-        hoverDirection = 'derecha';
-        moverCarrusel('derecha'); // Movimiento inmediato al entrar
+        moverCarrusel('derecha');
         hoverInterval = setInterval(() => {
             moverCarrusel('derecha');
         }, 800);
@@ -825,15 +912,12 @@ function crearNavegacionHover() {
     
     navRight.addEventListener('mouseleave', () => {
         clearInterval(hoverInterval);
-        hoverDirection = null;
     });
     
-    // También permitir clic como alternativa
     navLeft.addEventListener('click', () => moverCarrusel('izquierda'));
     navRight.addEventListener('click', () => moverCarrusel('derecha'));
 }
 
-// Agregar los estilos para las zonas de navegación
 function agregarEstilosNavegacionHover() {
     const estilosNavegacion = `
         .nav-hover-left, .nav-hover-right {
@@ -876,7 +960,6 @@ function agregarEstilosNavegacionHover() {
             background: linear-gradient(to left, rgba(255,62,62,0.3), transparent);
         }
         
-        /* Animación de pulso para indicar que pueden hacer clic/hover */
         @keyframes pulseNav {
             0% { opacity: 0.3; }
             50% { opacity: 0.7; }
@@ -889,7 +972,6 @@ function agregarEstilosNavegacionHover() {
             opacity: 0.3;
         }
         
-        /* Responsive */
         @media (max-width: 768px) {
             .nav-hover-left, .nav-hover-right {
                 width: 60px;
@@ -903,7 +985,6 @@ function agregarEstilosNavegacionHover() {
     document.head.appendChild(style);
 }
 
-// OCULTAR LOS BOTONES PREV Y NEXT ORIGINALES
 function ocultarBotonesOriginales() {
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
@@ -913,3 +994,159 @@ function ocultarBotonesOriginales() {
         nextBtn.style.display = 'none';
     }
 }
+// ============================================
+// MEJORAS INTERACTIVAS KIVY STREET (SIN INSTAGRAM)
+// ============================================
+
+// 1. EFECTO PARALLAX EN HERO
+function initParallax() {
+    window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        const heroImages = document.querySelectorAll('.hero-image-carousel img');
+        heroImages.forEach(img => {
+            img.style.transform = `translateY(${scrolled * 0.5}px) scale(${1 + scrolled * 0.001})`;
+        });
+    });
+}
+
+// 2. PARTÍCULAS FLOTANTES
+function createParticles() {
+    const particlesContainer = document.createElement('div');
+    particlesContainer.className = 'particles-container';
+    document.body.appendChild(particlesContainer);
+
+    for (let i = 0; i < 50; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        const size = Math.random() * 10 + 5;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.animationDelay = `${Math.random() * 20}s`;
+        particle.style.animationDuration = `${Math.random() * 10 + 10}s`;
+        particle.style.background = `rgba(255, 62, 62, ${Math.random() * 0.3})`;
+        particlesContainer.appendChild(particle);
+    }
+}
+
+// 3. BARRA DE PROGRESO
+function createScrollProgress() {
+    const progressBar = document.createElement('div');
+    progressBar.className = 'scroll-progress';
+    document.body.appendChild(progressBar);
+
+    window.addEventListener('scroll', () => {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        progressBar.style.width = scrolled + '%';
+    });
+}
+
+// 4. EFECTO DE ESCRITURA EN HERO
+function initTypingEffect() {
+    const heroTitle = document.querySelector('.hero h1');
+    if (!heroTitle) return;
+    
+    const originalText = heroTitle.innerText;
+    heroTitle.innerHTML = '';
+    heroTitle.className = 'typing-effect';
+    
+    let i = 0;
+    function typeWriter() {
+        if (i < originalText.length) {
+            heroTitle.innerHTML += originalText.charAt(i);
+            i++;
+            setTimeout(typeWriter, 100);
+        }
+    }
+    
+    setTimeout(typeWriter, 1000);
+}
+
+// 5. SKELETON LOADING PARA PRODUCTOS
+function showSkeletonLoading() {
+    const track = document.getElementById('track');
+    track.innerHTML = '';
+    
+    for (let i = 0; i < 6; i++) {
+        const skeleton = document.createElement('div');
+        skeleton.className = 'card skeleton';
+        skeleton.innerHTML = `
+            <div style="height: 200px; width: 100%; background: #2a2a2a;"></div>
+            <div style="height: 20px; width: 80%; margin: 10px auto; background: #2a2a2a;"></div>
+            <div style="height: 20px; width: 50%; margin: 10px auto; background: #2a2a2a;"></div>
+        `;
+        track.appendChild(skeleton);
+    }
+    
+    setTimeout(() => {
+        renderizarProductosMejorado(productos);
+    }, 2000);
+}
+
+
+
+
+
+
+// 9. EFECTO DE MOUSEOVER EN TARJETAS
+function initCardHoverEffect() {
+    document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / 20;
+            const rotateY = (centerX - x) / 20;
+            
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+        });
+    });
+}
+
+// 10. INICIALIZAR TODAS LAS MEJORAS
+function initAllEnhancements() {
+    initParallax();
+    createParticles();
+    createScrollProgress();
+    
+    showSkeletonLoading();
+    
+    setTimeout(() => {
+        createWelcomeModal();
+    }, 2000);
+    
+    createCountdownTimer();
+    createWhatsAppButton();
+    
+    setTimeout(() => {
+        initCardHoverEffect();
+    }, 2000);
+    
+    setTimeout(initTypingEffect, 3000);
+    
+    console.log('🎨 Todas las mejoras visuales activadas!');
+}
+
+// MODIFICAR EL window.onload EXISTENTE
+const originalOnload = window.onload;
+window.onload = function() {
+    if (originalOnload) originalOnload();
+    
+    const heroTitle = document.querySelector('.hero h1');
+    if (heroTitle) {
+        heroTitle.classList.add('glitch');
+        heroTitle.setAttribute('data-text', heroTitle.innerText);
+    }
+    
+    initAllEnhancements();
+};

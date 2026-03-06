@@ -8,7 +8,8 @@
     <!-- Font Awesome para iconos de redes sociales -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="estiloss.css">
-    <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD"></script>
+    <!-- Script de Mercado Pago -->
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -53,9 +54,7 @@
                 <p>Nacidos en el corazón de la cultura urbana, <strong>KIVY STREET</strong> es un manifiesto de estilo y resistencia.</p>
                 <p>Cada gorra es una obra de arte, inspirada en las calles que nos vieron crecer,con ediciones limitadas, diseñadas para los que viven la cultura urbana al máximo.</p>
                 <div class="social-links">
-                    <a href="#">Facebook</a>
-                    <a href="#">Instagram</a>
-                    <a href="#">TikTok</a>
+                    
                 </div>
             </div>
             
@@ -83,7 +82,7 @@
                 <a href="https://www.instagram.com/kivystreet?igsh=MTM1enhpdGRrZ3FjOA==" target="_blank" class="social-icon-footer" title="Instagram">
                     <i class="fab fa-instagram"></i>
                 </a>
-                <a href="hhttps://www.tiktok.com/@kivystreet?_r=1&_t=ZS-94JrFsV4gfl" target="_blank" class="social-icon-footer" title="TikTok">
+                <a href="https://www.tiktok.com/@kivystreet?_r=1&_t=ZS-94JrFsV4gfl" target="_blank" class="social-icon-footer" title="TikTok">
                     <i class="fab fa-tiktok"></i>
                 </a>
             </div>
@@ -102,7 +101,8 @@
                 <span>Total:</span>
                 <span id="cart-total">$0.00</span>
             </div>
-            <div id="paypal-button-container"></div>
+            <!-- Contenedor para el botón de Mercado Pago -->
+            <div id="mercado-pago-container"></div>
         </div>
     </div>
 
