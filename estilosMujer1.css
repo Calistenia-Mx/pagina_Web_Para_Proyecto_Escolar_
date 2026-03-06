@@ -1,0 +1,181 @@
+/* Ajuste para el main */
+main {
+    padding: 120px 8% 60px;
+    min-height: 80vh;
+}
+
+/* Cabecera de productos */
+.productos-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.product-count {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    color: #666;
+    background: #f0f0f0;
+    padding: 5px 15px;
+    border-radius: 20px;
+}
+
+/* Grid de productos */
+.productos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+/* Tarjetas de producto (reutilizamos .card pero ajustamos) */
+.card {
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.card img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.card img:hover {
+    transform: scale(1.03);
+}
+
+.card h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #000;
+    line-height: 1.4;
+    /* Para nombres largos, truncar */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.card .product-price {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin: 10px 0;
+}
+
+.card .product-description {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Botones */
+.card-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+}
+
+.add-btn {
+    flex: 1;
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.add-btn:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.quick-view-btn {
+    background: transparent;
+    border: 1px solid #ccc;
+    color: #333;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-radius: 4px;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quick-view-btn:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+/* Filtros (si los incluyes) */
+.filtros-container {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.filtro-input, .filtro-select {
+    padding: 12px 20px;
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 30px;
+    font-size: 14px;
+    color: #333;
+    transition: all 0.3s;
+    flex: 1;
+    min-width: 200px;
+}
+
+.filtro-input:focus, .filtro-select:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 62, 62, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    main {
+        padding: 100px 5% 40px;
+    }
+    .productos-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 20px;
+    }
+    .productos-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
