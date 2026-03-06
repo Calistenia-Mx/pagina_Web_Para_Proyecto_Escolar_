@@ -201,6 +201,31 @@ function removeFromCart(i) {
     mostrarNotificacion(`${item.nombre} removido del carrito`, 'error');
 }
 
+//pago paypal 
+// 6. PAYPAL 
+paypal.Buttons({
+    style: { color: 'black', shape: 'rect' },
+    createOrder: function(data, actions) {
+        const total = document.getElementById('cart-total').innerText.replace('$', '');
+        return actions.order.create({ 
+            purchase_units: [{ 
+                amount: { 
+                    value: total,
+                    currency_code: 'USD'
+                } 
+            }] 
+        });
+    },
+    onApprove: function(data, actions) {
+        return actions.order.capture().then(() => { 
+            mostrarNotificacion('¡Compra Exitosa! Gracias por tu compra.', 'success'); 
+            carrito = []; 
+            renderCart(); 
+            cartSidebar.classList.remove('open'); 
+        });
+    }
+}).render('#paypal-button-container');
+
 // 6. SISTEMA DE USUARIOS 
 
 function mostrarNotificacion(mensaje, tipo = 'success') {
