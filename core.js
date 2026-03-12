@@ -41,6 +41,7 @@ function addToCart(id, productosArray) {
 
 function renderCart() {
     if(!cartItemsContainer) return;
+    localStorage.setItem('kivy_cart', JSON.stringify(carrito)); // PERSISTENCIA
     cartItemsContainer.innerHTML = '';
     let total = 0;
     carrito.forEach((p, i) => {
@@ -143,6 +144,13 @@ async function logout() {
 
 // Init Core
 document.addEventListener('DOMContentLoaded', () => {
+    // Cargar carrito persistente
+    const savedCart = localStorage.getItem('kivy_cart');
+    if(savedCart) {
+        carrito = JSON.parse(savedCart);
+        renderCart();
+    }
+
     if(closeCartBtn) closeCartBtn.onclick = closeCart;
     if(cartOverlay) cartOverlay.onclick = closeCart;
     if(document.getElementById('cart-icon')) document.getElementById('cart-icon').onclick = openCart;

@@ -16,10 +16,19 @@ try {
         nombre_completo VARCHAR(100) NOT NULL,
         email VARCHAR(100) UNIQUE NOT NULL,
         password VARCHAR(255) NOT NULL,
+        rol ENUM('usuario', 'admin') DEFAULT 'usuario',
         fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
 
     $conexion->exec($sql);
+
+    // Insertar administrador por defecto si no existe
+    $check_admin = $conexion->query("SELECT COUNT(*) FROM usuarios WHERE email = 'admin@kivystreet.com'");
+    if ($check_admin->fetchColumn() == 0) {
+        $pass_admin = password_hash('admin123', PASSWORD_DEFAULT);
+        $sql_admin = "INSERT INTO usuarios (nombre_completo, email, password, rol) VALUES ('Administrador KIVY', 'admin@kivystreet.com', '$pass_admin', 'admin')";
+        $conexion->exec($sql_admin);
+    }
 
     // Crear tabla 'productos'
     $sql_productos = "CREATE TABLE IF NOT EXISTS productos (
