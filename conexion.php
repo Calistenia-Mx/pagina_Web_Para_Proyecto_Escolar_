@@ -53,7 +53,10 @@ try {
             ('Street Ghost', 40.00, 'imagenes/images 5.jpg', 10, 'Premium'),
             ('Night Vibe Beanie', 22.00, 'https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=500', 25, 'Beanie'),
             ('KIVY Logo Tee', 25.00, 'imagenes/images 2.jpg', 30, 'Apparel'),
-            ('Streetwear Special', 45.00, 'imagenes/images 3.jpg', 5, 'Limited')";
+            ('Streetwear Special', 45.00, 'imagenes/images 3.jpg', 5, 'Limited'),
+            ('KIVY Pink Cap', 32.00, 'https://images.unsplash.com/photo-1575032617751-6ddec2089882?w=500', 12, 'Mujer'),
+            ('Urban Rose Beanie', 24.00, 'https://images.unsplash.com/photo-1629135017122-0e3181822c9f?w=500', 18, 'Mujer'),
+            ('Street Chic Snapback', 38.00, 'https://images.unsplash.com/photo-1556306535-0f09a537f0a3?w=500', 8, 'Mujer')";
         $conexion->exec($sql_seeds);
     }
 
