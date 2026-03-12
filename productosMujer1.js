@@ -1,12 +1,12 @@
 // ============================================
 // DATOS DE PRODUCTOS (para la página de mujer)
 // ============================================
-const productosMujer = [
+window.productosMujer = [
     {
         id: 101,
         nombre: "New York Yankees Authentic Collection 59FIFTY Cerrada",
         precio: 999.00,
-        img: "imagenes/descarga (5).jpg", // Reemplaza con URLs reales
+        img: "imagenes/descarga (5).jpg",
         descripcion: "Los Angeles Dodgers MLB League Essentials 9FORTY Strapback Morada para Mujer"
     },
     {
@@ -20,7 +20,7 @@ const productosMujer = [
         id: 103,
         nombre: "Los Angeles Dodgers MLB Classics 9FORTY Strapback para Mujer",
         precio: 999.00,
-        img: "imagenes/images (1).jpg", // Reemplaza con URLs reales
+        img: "imagenes/images (1).jpg",
         descripcion: "Gorra de los Dodgers, edición coleccionista."
     },
     {
@@ -106,16 +106,15 @@ const productosMujer = [
         precio: 749.00,
         img: "imagenes/images (12).jpg",
         descripcion: "Los Angeles Dodgers MLB Cord 9FORTY Strapback para Mujer."
-    },
+    }
 ];
 
-// Función para renderizar el grid
 function renderProductosGrid() {
     const grid = document.getElementById('productos-grid');
     if (!grid) return;
 
     grid.innerHTML = '';
-    productosMujer.forEach((p, index) => {
+    window.productosMujer.forEach((p, index) => {
         const card = document.createElement('div');
         card.className = 'card';
         card.style.animationDelay = `${index * 0.05}s`;
@@ -133,55 +132,15 @@ function renderProductosGrid() {
     });
 }
 
-// Función de vista rápida (puedes reutilizar la que ya tienes o crear una simple)
 function showQuickView(id) {
-    const producto = productosMujer.find(p => p.id === id);
+    const producto = window.productosMujer.find(p => p.id === id);
     if (!producto) return;
-    // Aquí podrías implementar un modal de vista rápida, o simplemente mostrar una alerta
-    // Por ahora, solo haremos un console.log
-    console.log('Vista rápida de:', producto.nombre);
-    // También podrías abrir un modal con los detalles
+
     alert(`Vista rápida:\n${producto.nombre}\nPrecio: $${producto.precio}\n${producto.descripcion}`);
 }
 
-// Función addToCart mejorada (necesitas integrar con tu carrito existente)
-// Nota: tu carrito actual es un array vacío. Debes modificar addToCart para que agregue el producto.
-// Voy a redefinir addToCart para que use el array global carrito y actualice la vista.
-// Asegúrate de que tu carrito y funciones de render estén disponibles.
+window.showQuickView = showQuickView;
 
-// Si ya tienes un carrito definido arriba, lo usamos. Si no, lo creamos.
-if (typeof carrito === 'undefined') {
-    var carrito = [];
-}
-
-// Sobrescribimos addToCart para que funcione con productosMujer
-function addToCart(id) {
-    const producto = productosMujer.find(p => p.id === id);
-    if (!producto) return;
-    
-    carrito.push(producto);
-    
-    // Actualizar contador
-    const cartCount = document.getElementById('cart-count');
-    if (cartCount) {
-        cartCount.innerText = carrito.length;
-    }
-    
-    // Mostrar sidebar
-    if (cartSidebar) {
-        cartSidebar.classList.add('open');
-    }
-    
-    // Actualizar items del carrito (si tienes función renderCart, llámala)
-    if (typeof renderCart === 'function') {
-        renderCart();
-    } else {
-        // Si no, al menos mostrar notificación
-        mostrarNotificacion(`${producto.nombre} añadido al carrito`, 'info');
-    }
-}
-
-// Llamar a renderizar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', function() {
     renderProductosGrid();
 });

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>productosHombre</title>
+    <title>Productos Mujer | KIVY STREET</title>
     <link rel="stylesheet" href="estilosMujer.css">
     <link rel="stylesheet" href="estilosMujer1.css">
     <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD"></script>
@@ -38,9 +38,9 @@
             </div>
         </div>
         <!-- Carrito -->
-        <div id="cart-icon" style="cursor: pointer;">
+        <button id="cart-icon" class="cart-icon" type="button" aria-label="Abrir carrito">
             🛒 <small id="cart-count">0</small>
-        </div>
+        </button>
     </div>
 </nav>
 <!-- Modal de Login -->
@@ -79,15 +79,21 @@
     </div>
     <div id="cart-items" class="cart-items"></div>
     <div class="cart-footer">
-        <div class="total-container">
+        <div class="total-line">
+            <span>Subtotal:</span>
+            <span id="cart-subtotal">$0.00</span>
+        </div>
+        <div class="total-line grand-total">
             <span>Total:</span>
             <span id="cart-total">$0.00</span>
         </div>
+        <button class="checkout-btn" type="button">Continuar compra</button>
         <div id="paypal-button-container"></div>
     </div>
 </div>
+<div id="cart-overlay" class="cart-overlay"></div>
 
-<!--productos-->>
+<!-- productos -->
 <!-- Contenido principal -->
 <main style="padding-top: 100px;"> <!-- Para compensar el navbar fijo -->
     <div class="productos-header">
@@ -123,7 +129,6 @@
 </footer>
 
 
- <script src="script.js"></script>
  <script src="productosMujer1.js"></script>
  <script src="productosMujer.js"></script>
 
