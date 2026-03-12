@@ -5,22 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KIVY STREET | Premium Headwear</title>
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;400;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="estiloss.css">
-    <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD"></script>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <link rel="stylesheet" href="nosotros.css">
+     <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD"></script>
 </head>
 <body>
-    <nav class="navbar">
+     <nav class="navbar">
         <div class="logo">KIVY<span>STREET</span></div>
         <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="acercadenosotros.html">Nosotros</a></li>
-            <li><a href="productosMujer.html">Colección</a></li>
+            <li class="dropdown">
+                <a href="#productos" id="coleccion-link">Colección</a>
+                <ul class="dropdown-menu" id="coleccion-menu">
+                    <li><a href="#productos-hombre">Productos Hombre</a></li>
+                    <li><a href="productosMujer.html">Productos Mujer</a></li>
+                    <li><a href="#productos-joven">Productos Joven</a></li>
+                    <li><a href="#nuevos-modelos">Nuevos Modelos</a></li>
+                </ul>
+            </li>
         </ul>
         <div class="nav-icons">
-            <!-- Ícono de usuario con menú desplegable -->
+            <!-- Ícono de usuario con menú desplegable (Font Awesome) -->
             <div class="user-menu-container">
-                <div id="user-icon" class="user-icon" style="cursor: pointer;" title="Usuario">
-                    👤
+                <div id="user-icon" class="user-icon" title="Usuario">
+                    <i class="fas fa-user"></i>
                 </div>
                 <div id="user-dropdown" class="user-dropdown">
                     <a href="#" class="dropdown-item" onclick="showLoginModal()">Iniciar Sesión</a>
@@ -28,79 +38,15 @@
                 </div>
             </div>
             
-            <div id="cart-icon" style="cursor: pointer;">
-                🛒 <small id="cart-count">0</small>
+            <!-- Ícono de carrito con contador (Font Awesome) -->
+            <div id="cart-icon" class="cart-icon">
+                <i class="fas fa-shopping-cart"></i>
+                <small id="cart-count" class="cart-count">0</small>
             </div>
         </div>
     </nav>
-
-    <section class="hero" id="home">
-        <div class="hero-image-carousel" id="hero-carousel"></div>
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <h1>KIVY<span>STREET</span></h1>
-            <p>No es solo una gorra, es tu identidad. Ediciones limitadas diseñadas en las calles.</p>
-            <a href="index.html" class="btn-primary">Explorar Shop</a>
-        </div>
-    </section>
-
-    <section id="nosotros" class="about-section">
-        <div class="about-container">
-            <div class="about-text">
-                <h2 class="section-title">QUIENES SOMOS</h2>
-                <p>Nacidos en el corazón de la cultura urbana, <strong>KIVY STREET</strong> es un manifiesto de estilo y resistencia.</p>
-                <p>
-                    Somos una marca creada por 4 jovenes emprendedores que buscan llevar el estilo urbano a otro nivel. Nuestro proyecto nace de la pasion por las gorras y tenis combinando moda, identidad y cultura.
-                 </p>
-                <p>En KYVI street creemos que la ropa no solo se usa, se representa.</p>
-               
-            </div>
-        </div>
-
-        <div class="about-container">
-             <div class="about-text">
-
-            <h2 class="section-title">MISIÓN</h2>
-            <p>
-                Ofrecer gorras de calidad con un estilo urbano auténtico, accesible y moderno,
-                que permita a nuestros clientes expresar su personalidad y confianza.
-            </p>
-            </div>
-        </div>
-        
-        <div class="about-container">
-            <div class="about-text">
-                <h2 class="section-title">VISIÓN</h2>
-            <p>
-                Convertirnos en una marca reconocida a nivel local y nacional por nuestro
-                gran catálogo de venta y el servicio al cliente.
-            </p>
-            </div>
-        </div>
-
-
-        <div class="about-container">
-            <div class="about-text">
-                <h2 class="section-title">VALORES</h2>
-                <ul class="valores-lista">
-                <li>Calidad</li>
-                <li>Autenticidad</li>
-                <li>Innovación</li>
-                <li>Compromiso</li>
-                <li>Pasión</li>
-                </ul>
-                <div class="social-links">
-                    <a href="#">Facebook</a>
-                    <a href="#">Instagram</a>
-                    <a href="#">TikTok</a>
-                </div>
-            </div>
-        </div>
-    </section>
-    <footer>
-        <p>&copy; 2026 KIVY STREET - Authentic Headwear.</p>
-    </footer>
-
+       <!-- Overlay (fondo oscuro) -->
+<div class="cart-overlay" id="cart-overlay"></div>
     <div id="cart-sidebar" class="cart-sidebar">
         <div class="cart-header">
             <h2>Tu Carrito</h2>
@@ -116,7 +62,7 @@
         </div>
     </div>
 
-    <!-- Modal de Login (NO aparece al cargar) -->
+    <!-- Modal de Login -->
     <div id="login-modal" class="modal">
         <div class="modal-content">
             <div class="logo" style="margin-bottom: 20px;">KIVY<span>STREET</span></div>
@@ -146,6 +92,59 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+   
+
+    <section id="nosotros" class="about-section">
+        
+            
+                <h2 class="section-title">QUIENES SOMOS</h2>
+                <p>Nacidos en el corazón de la cultura urbana, <strong>KIVY STREET</strong> es un manifiesto de estilo y resistencia.</p>
+                <p>
+                    Somos una marca creada por 4 jovenes emprendedores que buscan llevar el estilo urbano a otro nivel. Nuestro proyecto nace de la pasion por las gorras y tenis combinando moda, identidad y cultura.
+                 </p>
+                <p>En KYVI street creemos que la ropa no solo se usa, se representa.</p>
+                <h2 class="section-title">MISIÓN</h2>
+            <p>
+                Ofrecer gorras de calidad con un estilo urbano auténtico, accesible y moderno,
+                que permita a nuestros clientes expresar su personalidad y confianza.
+            </p>
+            <h2 class="section-title">VISIÓN</h2>
+            <p>
+                Convertirnos en una marca reconocida a nivel local y nacional por nuestro
+                gran catálogo de venta y el servicio al cliente.
+            </p>
+            <h2 class="section-title">VALORES</h2>
+                <ul class="valores-lista">
+                <li>Calidad</li>
+                <li>Autenticidad</li>
+                <li>Innovación</li>
+                <li>Compromiso</li>
+                <li>Pasión</li>
+                </ul>
+                
+               
+           
+
+    </section>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="social-footer">
+                <a href="https://www.facebook.com/share/184PPRmMjH/" target="_blank" class="social-icon-footer" title="Facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="https://www.instagram.com/kivystreet?igsh=MTM1enhpdGRrZ3FjOA==" target="_blank" class="social-icon-footer" title="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://www.tiktok.com/@kivystreet?_r=1&_t=ZS-94JrFsV4gfl" target="_blank" class="social-icon-footer" title="TikTok">
+                    <i class="fab fa-tiktok"></i>
+                </a>
+            </div>
+            <p class="copyright">&copy; 2026 KIVY STREET - Authentic Headwear.</p>
+        </div>
+    </footer>
+
+      
+    <script src="nosotros.js"></script>
 </body>
 </html>

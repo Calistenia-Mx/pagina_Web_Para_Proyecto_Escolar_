@@ -451,31 +451,8 @@ body {
 }
 .dropdown-item:last-child { border-bottom: none; }
 
-/* Hero */
-.hero { height: 80vh; position: relative; display: flex; align-items: center; overflow: hidden; }
-.hero-image-carousel { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; transition: transform 1s ease-in-out; }
-.hero-image-carousel img { min-width: 100%; height: 100%; object-fit: cover; filter: brightness(0.8); }
-.hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, rgba(255,255,255,0.9), transparent); z-index: 1; }
-.hero-content { position: relative; z-index: 2; padding: 0 8%; max-width: 800px; }
-.hero h1 { font-family: 'Syncopate'; font-size: 4rem; margin-bottom: 20px; color: #000; }
-.hero h1 span { color: var(--primary); display: block; }
-.hero p { color: #333; }
-.btn-primary {
-    background: var(--primary);
-    color: white;
-    padding: 15px 30px;
-    text-decoration: none;
-    font-weight: bold;
-    border-radius: 4px;
-    display: inline-block;
-    transition: background 0.3s, transform 0.2s;
-}
-.btn-primary:hover { background: #ff1e1e; transform: translateY(-2px); }
 
-/* About Section */
-.about-section { padding: 100px 8%; background: #ffffff; }
-.about-container { display: flex; align-items: center; gap: 50px; flex-wrap: wrap; }
-.about-text { flex: 1; min-width: 300px; }
+
 .section-title {
     font-family: 'Syncopate';
     font-size: 2rem;
@@ -830,21 +807,7 @@ section[id] {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Ajuste para pantallas pequeñas (responsive) */
-@media (max-width: 768px) {
-  .about-section {
-    flex-direction: column; /* En móvil, imagen arriba y textos abajo */
-    text-align: center;
-  }
 
-  .imagencentral img {
-    width: 200px;           /* Imagen un poco más pequeña en móvil */
-  }
-
-  .valores p {
-    font-size: 1.5rem;
-  }
-}
 /* ================= FOOTER REDES ================= */
 
 .footer-social {
@@ -931,4 +894,133 @@ footer {
     .copyright {
         font-size: 0.75rem;
     }
+}
+/* Reset específico para la sección nosotros */
+#nosotros {
+  display: block !important;           /* Asegura que sea bloque */
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  background-color: #f8fafc;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Todos los hijos directos e indirectos se comportan como bloque */
+#nosotros * {
+  display: block !important;           /* Fuerza bloque en todos los elementos */
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Excepción para elementos que deben ser inline (como strong, li) */
+#nosotros strong {
+  display: inline !important;          /* Las negritas siguen siendo inline */
+  width: auto;
+}
+
+#nosotros li {
+  display: inline-block !important;    /* Los items de la lista queremos que se vean en línea (etiquetas) */
+  width: auto;
+}
+
+/* Títulos */
+#nosotros .section-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 3rem 0 1rem 0 !important;    /* Margen superior e inferior */
+  padding-bottom: 0.5rem;
+  position: relative;
+  letter-spacing: -0.5px;
+}
+
+/* Línea decorativa */
+#nosotros .section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  border-radius: 4px;
+}
+
+/* Primer título sin margen superior */
+#nosotros .section-title:first-of-type {
+  margin-top: 0 !important;
+}
+
+/* Párrafos */
+#nosotros p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #334155;
+  margin: 0 0 1.5rem 0 !important;
+  max-width: 800px;
+}
+
+/* Lista de valores - contenedor */
+.valores-lista {
+  display: flex !important;            /* Flex para alinearlos horizontalmente */
+  flex-wrap: wrap;
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 2rem 0 !important;
+}
+
+/* Cada valor (etiqueta) */
+.valores-lista li {
+  background: white;
+  padding: 0.7rem 2rem;
+  border-radius: 50px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+  display: inline-block !important;
+  width: auto;
+}
+
+.valores-lista li:hover {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(59,130,246,0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #nosotros {
+    padding: 2rem 1.5rem;
+  }
+  #nosotros .section-title {
+    font-size: 1.8rem;
+  }
+  #nosotros p {
+    font-size: 1rem;
+  }
+  .valores-lista li {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .valores-lista {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .valores-lista li {
+    text-align: center;
+  }
 }
