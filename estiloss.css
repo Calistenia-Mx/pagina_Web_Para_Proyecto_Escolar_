@@ -98,15 +98,27 @@ body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sa
 .about-image img { width: 100%; border-radius: 8px; filter: grayscale(1); }
 .social-links a { color: var(--primary); text-decoration: none; margin-right: 20px; font-weight: bold; text-transform: uppercase; font-size: 0.8rem; }
 
-.carousel-container { padding: 100px 8%; text-align: center; }
-.carousel-viewport { overflow: hidden; width: 100%; }
-.carousel-track { display: flex; gap: 20px; transition: transform 0.5s ease-out; }
-.card { min-width: calc(33.333% - 20px); background: var(--card-bg); padding: 20px; border: 1px solid #333; }
-.card img { width: 100%; border-radius: 4px; margin-bottom: 15px; }
-.add-btn { width: 100%; background: transparent; border: 1px solid var(--primary); color: white; padding: 10px; cursor: pointer; transition: 0.3s; }
+.catalog-section { padding: 100px 8%; text-align: center; background: #0a0a0a; }
+.catalog-subtitle { color: #b0b0b0; max-width: 680px; margin: -10px auto 40px; line-height: 1.6; }
+.catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    width: 100%;
+}
+.card {
+    background: linear-gradient(160deg, #191919, #0f0f0f);
+    padding: 18px;
+    border: 1px solid #2d2d2d;
+    border-radius: 14px;
+    text-align: left;
+}
+.card img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 10px; margin-bottom: 14px; }
+.card h3 { font-size: 1rem; margin-bottom: 8px; }
+.card-price { color: var(--primary); font-weight: 700; margin-bottom: 10px; }
+.card-description { color: #b5b5b5; font-size: 0.92rem; line-height: 1.45; margin-bottom: 14px; min-height: 52px; }
+.add-btn { width: 100%; background: transparent; border: 1px solid var(--primary); color: white; padding: 12px; cursor: pointer; transition: 0.3s; border-radius: 8px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.03em; }
 .add-btn:hover { background: var(--primary); }
-.carousel-controls { margin-top: 30px; display: flex; justify-content: center; gap: 15px; }
-.control-btn { background: white; border: none; padding: 10px 25px; font-weight: bold; cursor: pointer; }
 
 /* Carrito */
 .cart-sidebar { position: fixed; top: 0; right: 0; width: 350px; height: 100vh; background: #111; border-left: 2px solid var(--primary); z-index: 1001; padding: 20px; transform: translateX(100%); transition: 0.4s; display: flex; flex-direction: column; }

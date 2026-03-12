@@ -5,14 +5,14 @@
 
 // 1. DATOS DE PRODUCTOS 
 const productos = [
-    { id: 1, nombre: "Gorra Dandy Hats", precio: 35.00, img: "images 4.jpg" },
-    { id: 2, nombre: "Gorra Thirty One", precio: 29.00, img: "images 6.jpg" },
-    { id: 3, nombre: "Gorra la ultima cena", precio: 40.00, img: "images 5.jpg" },
-    { id: 4, nombre: "Rude Awakenings Rude", precio: 22.00, img: "images 7.jpg" },
-    { id: 5, nombre: "Gorra Barbas Hats X Aleman", precio: 25.00, img: "images 2.jpg" },
-    { id: 6, nombre: "Barbas hats Chrome CT", precio: 45.00, img: "images 3.jpg" },
-    { id: 7, nombre: "Gorra 31 Hats", precio: 45.00, img: "images 8.jpg" },
-    { id: 8, nombre: "Gorra New era New York Yankees", precio: 45.00, img: "images.jpg" },
+    { id: 1, nombre: "Gorra Dandy Hats", precio: 35.00, img: "images 4.jpg", descripcion: "Diseño negro minimalista con vibra underground para uso diario." },
+    { id: 2, nombre: "Gorra Thirty One", precio: 29.00, img: "images 6.jpg", descripcion: "Perfil clásico con visera curva y ajuste cómodo para skate o ciudad." },
+    { id: 3, nombre: "Gorra La Última Cena", precio: 40.00, img: "images 5.jpg", descripcion: "Pieza gráfica premium que mezcla arte urbano y actitud streetwear." },
+    { id: 4, nombre: "Rude Awakenings", precio: 22.00, img: "images 7.jpg", descripcion: "Estética bold con detalles bordados para outfits relajados." },
+    { id: 5, nombre: "Barbas Hats x Alemán", precio: 25.00, img: "images 2.jpg", descripcion: "Colaboración exclusiva inspirada en la escena hip-hop mexicana." },
+    { id: 6, nombre: "Barbas Hats Chrome CT", precio: 45.00, img: "images 3.jpg", descripcion: "Acabados de alta calidad y presencia fuerte para destacar en cualquier look." },
+    { id: 7, nombre: "Gorra 31 Hats", precio: 45.00, img: "images 8.jpg", descripcion: "Modelo contemporáneo para quienes buscan estilo y personalidad." },
+    { id: 8, nombre: "New Era New York Yankees", precio: 45.00, img: "images.jpg", descripcion: "Icono urbano atemporal con silueta limpia y ajuste estructurado." },
 ];
 
 const heroImages = [
@@ -57,15 +57,6 @@ function updateCarousel() {
     track.style.transform = `translateX(${-index * cardWidth}px)`;
 }
 
-document.getElementById('nextBtn').onclick = () => { 
-    index = (index < productos.length-1) ? index+1 : 0; 
-    updateCarousel(); 
-};
-
-document.getElementById('prevBtn').onclick = () => { 
-    index = (index > 0) ? index-1 : productos.length-1; 
-    updateCarousel(); 
-};
 
 // 5. FUNCIONALIDAD DEL CARRITO 
 function addToCart(id) {
@@ -574,18 +565,16 @@ function renderizarProductosMejorado(productosAMostrar) {
     track.innerHTML = '';
     
     productosAMostrar.forEach((p, index) => {
-        const div = document.createElement('div');
+        const div = document.createElement('article');
         div.className = 'card';
         div.style.animationDelay = `${index * 0.05}s`;
         
         div.innerHTML = `
-            <img src="${p.img}" alt="${p.nombre}" loading="lazy" onclick="showQuickViewMejorado(${p.id})">
+            <img src="${p.img}" alt="${p.nombre}" loading="lazy">
             <h3>${p.nombre}</h3>
-            <p>$${p.precio.toFixed(2)}</p>
-            <div class="card-buttons">
-                <button class="add-btn" onclick="addToCart(${p.id})">🛒 Añadir</button>
-                <button class="quick-view-btn" onclick="showQuickViewMejorado(${p.id})" title="Vista rápida">👁️</button>
-            </div>
+            <p class="card-price">$${p.precio.toFixed(2)}</p>
+            <p class="card-description">${p.descripcion}</p>
+            <button class="add-btn" onclick="addToCart(${p.id})">Agregar al carrito</button>
         `;
         track.appendChild(div);
     });
@@ -593,8 +582,6 @@ function renderizarProductosMejorado(productosAMostrar) {
     if (productosAMostrar.length === 0) {
         track.innerHTML = '<div class="no-resultados">😕 No se encontraron productos</div>';
     }
-    
-    updateCarousel();
 }
 
 // 11. FILTROS MEJORADOS
@@ -622,8 +609,9 @@ function crearFiltrosMejorados() {
         </div>
     `;
     
-    const carruselContainer = document.querySelector('.carousel-container');
-    carruselContainer.insertAdjacentHTML('afterbegin', filtrosHTML);
+    const catalogContainer = document.querySelector('.catalog-section');
+    if (!catalogContainer) return;
+    catalogContainer.insertAdjacentHTML('afterbegin', filtrosHTML);
     
     // Event listeners
     document.getElementById('busqueda').addEventListener('input', aplicarFiltrosMejorados);
@@ -757,11 +745,6 @@ window.onload = function() {
     document.body.style.overflow = "auto";
     document.body.style.overflowX = "hidden";
 
-    // Nueva navegación hover
-    ocultarBotonesOriginales();
-    agregarEstilosNavegacionHover();
-    crearNavegacionHover();
-    
     console.log(' KIVY STREET - Versión Mejorada cargada!');
 };
 
@@ -913,4 +896,3 @@ function ocultarBotonesOriginales() {
         nextBtn.style.display = 'none';
     }
 }
-
