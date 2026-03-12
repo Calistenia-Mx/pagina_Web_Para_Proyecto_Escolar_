@@ -41,23 +41,18 @@ function addToCart(id, productosArray) {
 
 function renderCart() {
     if(!cartItemsContainer) return;
-    localStorage.setItem('kivy_cart', JSON.stringify(carrito)); // PERSISTENCIA
     cartItemsContainer.innerHTML = '';
     let total = 0;
     carrito.forEach((p, i) => {
         total += parseFloat(p.precio);
         cartItemsContainer.innerHTML += `
-            <div class="cart-item" style="animation: slideIn 0.3s ease forwards; animation-delay: ${i*0.1}s">
-                <div class="cart-item-img">
-                    <img src="${p.imagen || p.img}" alt="${p.nombre}">
-                </div>
-                <div class="cart-item-details">
+            <div class="cart-item">
+                <img src="${p.imagen || p.img}" alt="${p.nombre}">
+                <div>
                     <h4>${p.nombre}</h4>
-                    <p class="price">$${parseFloat(p.precio).toFixed(2)}</p>
+                    <p>$${parseFloat(p.precio).toFixed(2)}</p>
                 </div>
-                <button class="remove-btn" onclick="removeFromCart(${i})">
-                    <i class="fas fa-trash-alt"></i>
-                </button>
+                <button onclick="removeFromCart(${i})">×</button>
             </div>`;
     });
     if(cartCount) cartCount.innerText = carrito.length;
@@ -133,10 +128,10 @@ async function checkSession() {
         const data = await res.json();
         if(data.loggedIn) {
             userIcon.innerHTML = `👋`;
-                userDropdown.innerHTML = `
-                    <a href="admin_dashboard.php" class="dropdown-item">Panel Admin</a>
-                    <a href="#" class="dropdown-item" onclick="logout()">Cerrar Sesión</a>
-                `;
+            userDropdown.innerHTML = `
+                <a href="admin.php" class="dropdown-item">Panel Admin</a>
+                <a href="#" class="dropdown-item" onclick="logout()">Cerrar Sesión</a>
+            `;
         }
     } catch(e) {}
 }
@@ -148,47 +143,8 @@ async function logout() {
 
 // Init Core
 document.addEventListener('DOMContentLoaded', () => {
-    // Cargar carrito persistente
-    const savedCart = localStorage.getItem('kivy_cart');
-    if(savedCart) {
-        carrito = JSON.parse(savedCart);
-        renderCart();
-    }
-
     if(closeCartBtn) closeCartBtn.onclick = closeCart;
     if(cartOverlay) cartOverlay.onclick = closeCart;
     if(document.getElementById('cart-icon')) document.getElementById('cart-icon').onclick = openCart;
     checkSession();
-
-    // Login Form
-    const loginForm = document.getElementById('login-form');
-    if(loginForm) {
-        loginForm.onsubmit = async (e) => {
-            e.preventDefault();
-            const res = await fetch('login.php', { method: 'POST', body: new FormData(e.target) });
-            const result = await res.json();
-            if(result.success) {
-                mostrarNotificacion(`Bienvenido ${result.usuario.nombre}`, 'success');
-                location.reload();
-            } else {
-                result.errors.forEach(err => mostrarNotificacion(err, 'error'));
-            }
-        };
-    }
-
-    // Register Form
-    const registerForm = document.getElementById('register-form');
-    if(registerForm) {
-        registerForm.onsubmit = async (e) => {
-            e.preventDefault();
-            const res = await fetch('registrar.php', { method: 'POST', body: new FormData(e.target) });
-            const result = await res.json();
-            if(result.success) {
-                mostrarNotificacion(result.message, 'success');
-                showLoginModal();
-            } else {
-                result.errors.forEach(err => mostrarNotificacion(err, 'error'));
-            }
-        };
-    }
 });
