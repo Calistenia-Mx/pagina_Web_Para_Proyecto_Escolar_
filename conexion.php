@@ -11,16 +11,14 @@ try {
     $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // Verificar si la tabla 'usuarios' existe, si no, crearla
-    $sql = "CREATE TABLE IF NOT EXISTS usuarios (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        nombre_completo VARCHAR(100) NOT NULL,
-        email VARCHAR(100) UNIQUE NOT NULL,
-        password VARCHAR(255) NOT NULL,
-        rol ENUM('usuario', 'admin') DEFAULT 'usuario',
-        fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
-
     $conexion->exec($sql);
+
+    // Asegurar que la columna 'rol' existe (para actualizaciones)
+    try {
+        $conexion->exec("ALTER TABLE usuarios ADD COLUMN rol ENUM('usuario', 'admin') DEFAULT 'usuario' AFTER password");
+    } catch (Exception $e) {
+        // La columna probablemente ya existe
+    }
 
     // Insertar administrador por defecto si no existe
     $check_admin = $conexion->query("SELECT COUNT(*) FROM usuarios WHERE email = 'admin@kivystreet.com'");

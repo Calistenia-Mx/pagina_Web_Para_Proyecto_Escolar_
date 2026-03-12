@@ -1,5 +1,5 @@
 // ============================================
-// KIVY STREET - HOME SCRIPT (INDEX)
+// KIVY STREET - HOME SCRIPT (VERSION MEJORADA + CORE)
 // ============================================
 
 let heroImages = [
@@ -10,11 +10,12 @@ let heroImages = [
 
 let index = 0;
 let heroIndex = 0;
-let productosHome = [];
+let productosBase = []; // Datos crudos de la BD
 
 const track = document.getElementById('track');
 const heroCarousel = document.getElementById('hero-carousel');
 
+// 1. HERO CAROUSEL
 function initHero() {
     if(!heroCarousel) return;
     heroImages.forEach(src => {
@@ -29,6 +30,7 @@ function initHero() {
     }, 5000);
 }
 
+// 2. NAVEGACION CARRUSEL
 function updateCarousel() {
     const card = document.querySelector('.card');
     if(!card || !track) return;
@@ -36,46 +38,87 @@ function updateCarousel() {
     track.style.transform = `translateX(${-index * cardWidth}px)`;
 }
 
-if(document.getElementById('nextBtn')) {
-    document.getElementById('nextBtn').onclick = () => { 
-        index = (index < productosHome.length-1) ? index+1 : 0; 
-        updateCarousel(); 
-    };
-}
+document.getElementById('nextBtn').onclick = () => { 
+    index = (index < (track.children.length - 1)) ? index+1 : 0; 
+    updateCarousel(); 
+};
 
-if(document.getElementById('prevBtn')) {
-    document.getElementById('prevBtn').onclick = () => { 
-        index = (index > 0) ? index-1 : productosHome.length-1; 
-        updateCarousel(); 
-    };
-}
+document.getElementById('prevBtn').onclick = () => { 
+    index = (index > 0) ? index-1 : (track.children.length - 1); 
+    updateCarousel(); 
+};
 
-function renderizarProductosHome(list) {
+// 3. RENDERIZADO MEJORADO
+function renderizarProductosDinamico(lista) {
     if(!track) return;
     track.innerHTML = '';
-    list.forEach((p, i) => {
+    
+    if(lista.length === 0) {
+        track.innerHTML = '<div class="no-resultados"> No se encontraron productos</div>';
+        return;
+    }
+
+    lista.forEach((p, i) => {
         const div = document.createElement('div');
-        div.className = 'card';
+        div.className = 'card fade-in-scale';
+        div.style.animationDelay = `${i * 0.1}s`;
         div.innerHTML = `
-            <img src="${p.imagen}" alt="${p.nombre}" onclick="showQuickViewHome(${p.id})">
+            <div class="card-img-container">
+                <img src="${p.imagen}" alt="${p.nombre}" onclick="showQuickViewMejorado(${p.id})">
+            </div>
             <h3>${p.nombre}</h3>
-            <p>$${parseFloat(p.precio).toFixed(2)}</p>
+            <p class="product-price">$${parseFloat(p.precio).toFixed(2)}</p>
             <div class="card-buttons">
-                <button class="add-btn" onclick="addToCart(${p.id}, productosHome)"> Añadir</button>
+                <button class="add-btn" onclick="addToCart(${p.id}, productosBase)"> <i class="fas fa-shopping-bag"></i> Añadir</button>
+                <button class="quick-view-btn" onclick="showQuickViewMejorado(${p.id})"> <i class="fas fa-eye"></i></button>
             </div>
         `;
         track.appendChild(div);
     });
+    index = 0;
     updateCarousel();
 }
 
-async function loadHomeProducts() {
-    const res = await fetch('obtener_productos.php');
-    productosHome = await res.json();
-    renderizarProductosHome(productosHome);
+// 4. VISTA RAPIDA
+function showQuickViewMejorado(id) {
+    const p = productosBase.find(item => item.id == id);
+    if(!p) return;
+    
+    // Si no existe el modal en el DOM, core.js debería manejarlo o lo creamos aquí
+    // Para simplificar, usamos una función de core si existe, o implementamos una rápida
+    if(typeof window.setupQuickViewModal === 'function') {
+        window.openQuickView(p);
+    } else {
+        // Implementación rápida si core no la tiene
+        mostrarNotificacion(`Detalles de: ${p.nombre}`, 'info');
+    }
 }
 
+// 5. FILTROS
+async function loadAndInit() {
+    try {
+        const res = await fetch('obtener_productos.php');
+        productosBase = await res.json();
+        renderizarProductosDinamico(productosBase);
+        crearFiltrosHome();
+    } catch (e) {
+        console.error("Error cargando productos:", e);
+    }
+}
+
+function crearFiltrosHome() {
+    const busqueda = document.getElementById('busqueda');
+    if(busqueda) {
+        busqueda.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtrados = productosBase.filter(p => p.nombre.toLowerCase().includes(term));
+            renderizarProductosDinamico(filtrados);
+        });
+    }
+}
+
+// INIT
 document.addEventListener('DOMContentLoaded', () => {
     initHero();
-    loadHomeProducts();
+    loadAndInit();
 });
