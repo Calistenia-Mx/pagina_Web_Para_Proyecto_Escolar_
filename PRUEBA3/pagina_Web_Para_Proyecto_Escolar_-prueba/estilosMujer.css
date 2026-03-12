@@ -1,0 +1,305 @@
+:root {
+    --primary: #ff3e3e;
+    --bg: #f8f9fa;
+    --text: #1a1a1a;
+    --navbar-bg: rgba(255,255,255,0.95);
+    --border-color: #e0e0e0;
+    --dropdown-bg: #ffffff;
+    --shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 8%;
+    background: var(--navbar-bg);
+    position: fixed;
+    width: 100%;
+    z-index: 100;
+    border-bottom: 1px solid var(--border-color);
+    backdrop-filter: blur(5px);
+}
+
+.logo {
+    font-family: 'Syncopate', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--text);
+}
+
+.logo span {
+    color: var(--primary);
+}
+
+/* Navegación principal */
+.nav-links {
+    display: flex;
+    gap: 48px;
+    list-style: none;
+    align-items: center;
+}
+
+.nav-links li a {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: #000000;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    padding: 5px 0;
+    transition: color 0.3s ease;
+}
+
+.nav-links li a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary);
+    transition: width 0.3s ease;
+}
+
+.nav-links li a:hover {
+    color: var(--primary);
+}
+
+.nav-links li a:hover::after {
+    width: 100%;
+}
+
+/* Dropdown Colección */
+.dropdown {
+    position: relative;
+}
+
+#coleccion-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+#coleccion-link::after {
+    content: '▼';
+    font-size: 0.7rem;
+    color: currentColor;
+    transition: transform 0.3s ease;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    min-width: 220px;
+    list-style: none;
+    padding: 8px 0;
+    margin: 5px 0 0 0;
+    box-shadow: var(--shadow);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.dropdown-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-menu li a {
+    display: block;
+    padding: 10px 20px;
+    color: #000;
+    font-size: 0.95rem;
+    text-decoration: none;
+    text-transform: none;
+    transition: background 0.3s, color 0.3s;
+}
+
+.dropdown-menu li a:hover {
+    background: rgba(255, 62, 62, 0.1);
+    color: var(--primary);
+}
+
+/* Rotar flecha cuando el menú está abierto */
+.dropdown-menu.show + #coleccion-link::after {
+    transform: rotate(180deg);
+}
+
+/* Iconos de navegación */
+.nav-icons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Menú de usuario */
+.user-menu-container {
+    position: relative;
+}
+
+.user-icon {
+    font-size: 1.5rem;
+    padding: 5px;
+    border-radius: 50%;
+    transition: all 0.3s;
+    color: var(--text);
+    cursor: pointer;
+}
+
+.user-icon:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.user-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--dropdown-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    min-width: 180px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s;
+    z-index: 1000;
+    box-shadow: var(--shadow);
+}
+
+.user-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    display: block;
+    padding: 12px 20px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--border-color);
+    transition: background 0.3s;
+    text-transform: none;
+}
+
+.dropdown-item:hover {
+    background: rgba(255, 62, 62, 0.1);
+    color: var(--primary);
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+}
+
+/* Carrito */
+#cart-icon {
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* Modales (si los necesitas en la nueva página) */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.95);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content, .register-content {
+    background: #fff;
+    padding: 50px;
+    border: 1px solid var(--border-color);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.modal .logo {
+    color: #000;
+    margin-bottom: 20px;
+}
+
+#login-form input, #register-form input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    background: #f8f9fa;
+    border: 1px solid var(--border-color);
+    color: #000;
+    border-radius: 4px;
+}
+
+#login-form input:focus, #register-form input:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.checkout-btn {
+    width: 100%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 15px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+
+.checkout-btn:hover {
+    background: #ff1e1e;
+}
+.cart-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 350px;
+    height: 100vh;
+    background: #fff;
+    border-left: 2px solid var(--primary);
+    z-index: 1001;
+    padding: 20px;
+    transform: translateX(100%);
+    transition: 0.4s;
+    display: flex;
+    flex-direction: column;
+    box-shadow: -4px 0 12px rgba(0,0,0,0.1);
+}
+
+.cart-sidebar.open {
+    transform: translateX(0);
+}
+/* ... resto de estilos de carrito ... */

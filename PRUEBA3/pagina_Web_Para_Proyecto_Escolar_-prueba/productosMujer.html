@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>productosHombre</title>
+    <link rel="stylesheet" href="estilosMujer.css">
+    <link rel="stylesheet" href="estilosMujer1.css">
+    <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;400;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- HEADER / NAVBAR -->
+<nav class="navbar">
+    <div class="logo">KIVY<span>STREET</span></div>
+    <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#nosotros">Nosotros</a></li>
+        <li class="dropdown">
+            <a href="#productos" id="coleccion-link">Colección</a>
+            <ul class="dropdown-menu" id="coleccion-menu">
+                <li><a href="#productos-hombre">Productos Hombre</a></li>
+                <li><a href="#productos-mujer">Productos Mujer</a></li>
+                <li><a href="#productos-joven">Productos Joven</a></li>
+                <li><a href="#nuevos-modelos">Nuevos Modelos</a></li>
+            </ul>
+        </li>
+    </ul>
+    <div class="nav-icons">
+        <!-- Menú de usuario -->
+        <div class="user-menu-container">
+            <div id="user-icon" class="user-icon" style="cursor: pointer;" title="Usuario">
+                👤
+            </div>
+            <div id="user-dropdown" class="user-dropdown">
+                <a href="#" class="dropdown-item" onclick="showLoginModal()">Iniciar Sesión</a>
+                <a href="#" class="dropdown-item" onclick="showRegisterModal()">Crear Cuenta</a>
+            </div>
+        </div>
+        <!-- Carrito -->
+        <div id="cart-icon" style="cursor: pointer;">
+            🛒 <small id="cart-count">0</small>
+        </div>
+    </div>
+</nav>
+<!-- Modal de Login -->
+<div id="login-modal" class="modal">
+    <div class="modal-content">
+        <div class="logo">KIVY<span>STREET</span></div>
+        <h2 class="section-title" style="font-size: 1.2rem; margin-bottom: 10px;">INICIAR SESIÓN</h2>
+        <p style="color: #888; margin-bottom: 20px;">Accede a tu cuenta</p>
+        <form id="login-form">
+            <input type="email" name="email" placeholder="Correo Electrónico" required>
+            <input type="password" name="password" placeholder="Contraseña" required>
+            <button type="submit" class="checkout-btn">ENTRAR A LA WEB</button>
+        </form>
+    </div>
+</div>
+
+<!-- Modal de Registro -->
+<div id="register-modal" class="modal">
+    <div class="register-content">
+        <div class="logo">KIVY<span>STREET</span></div>
+        <h2 class="section-title" style="font-size: 1.2rem; margin-bottom: 10px;">CREAR CUENTA</h2>
+        <p style="color: #888; margin-bottom: 20px;">Únete a la comunidad KIVY</p>
+        <form id="register-form">
+            <input type="text" name="nombre" placeholder="Nombre Completo" required>
+            <input type="email" name="email" placeholder="Correo Electrónico" required>
+            <input type="password" name="password" placeholder="Contraseña (mín. 6 caracteres)" required>
+            <input type="password" name="confirm_password" placeholder="Confirmar Contraseña" required>
+            <button type="submit" class="checkout-btn">CREAR CUENTA</button>
+        </form>
+    </div>
+</div>
+<div id="cart-sidebar" class="cart-sidebar">
+    <div class="cart-header">
+        <h2>Tu Carrito</h2>
+        <button id="close-cart">×</button>
+    </div>
+    <div id="cart-items" class="cart-items"></div>
+    <div class="cart-footer">
+        <div class="total-container">
+            <span>Total:</span>
+            <span id="cart-total">$0.00</span>
+        </div>
+        <div id="paypal-button-container"></div>
+    </div>
+</div>
+
+<!--productos-->>
+<!-- Contenido principal -->
+<main style="padding-top: 100px;"> <!-- Para compensar el navbar fijo -->
+    <div class="productos-header">
+        <h1 class="section-title">GORRAS</h1>
+        <span class="product-count">15 productos</span> <!-- Puedes cambiar el número -->
+    </div>
+
+    <!-- Filtros (opcional, puedes omitirlos si no los necesitas) -->
+    <div class="filtros-container">
+        <input type="text" id="busqueda" class="filtro-input" placeholder="🔍 Buscar...">
+        <select id="filtro-precio" class="filtro-select">
+            <option value="0">Todos los precios</option>
+            <option value="50">Hasta $50</option>
+            <option value="100">Hasta $100</option>
+            <option value="200">Hasta $200</option>
+            <option value="500">Hasta $500</option>
+        </select>
+        <select id="ordenar" class="filtro-select">
+            <option value="default">Ordenar por</option>
+            <option value="menor">Menor precio</option>
+            <option value="mayor">Mayor precio</option>
+            <option value="az">A-Z</option>
+        </select>
+    </div>
+
+    <!-- Grid de productos -->
+    <div class="productos-grid" id="productos-grid"></div>
+</main>
+
+<!-- Footer (opcional, puedes poner uno simple) -->
+<footer>
+    <p>&copy; 2026 KIVY STREET - Authentic Headwear.</p>
+</footer>
+
+
+
+ <script src="productosMujer1.js"></script>
+ <script src="productosMujer.js"></script>
+
+</body>
+</html>
