@@ -4,14 +4,7 @@
 // ============================================
 
 // 1. DATOS DE PRODUCTOS 
-const productos = [
-    { id: 1, nombre: "KIVY Black Snapback", precio: 35.00, img: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=500" },
-    { id: 2, nombre: "Urban Crimson", precio: 29.00, img: "https://images.unsplash.com/photo-1521369909029-2afed882baee?w=500" },
-    { id: 3, nombre: "Street Ghost", precio: 40.00, img: "imagenes/images 5.jpg" },
-    { id: 4, nombre: "Night Vibe Beanie", precio: 22.00, img: "https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=500" },
-    { id: 5, nombre: "KIVY Logo Tee", precio: 25.00, img: "imagenes/images 2.jpg" },
-    { id: 6, nombre: "Streetwear", precio: 45.00, img: "imagenes/images 3.jpg" }
-];
+let productos = []; // Se cargará dinámicamente desde la BD
 
 const heroImages = [
     "https://images.unsplash.com/photo-1534215754734-18e55d13e346?q=80&w=2000",
@@ -127,11 +120,31 @@ paypal.Buttons({
         });
     },
    onApprove: function(data, actions) {
-    return actions.order.capture().then(() => { 
+    return actions.order.capture().then(async (details) => { 
         mostrarNotificacion('¡Compra Exitosa! Gracias por tu compra.', 'success'); 
+        
+        // Guardar la orden en la base de datos
+        const orderData = {
+            paypal_order_id: details.id,
+            total: document.getElementById('cart-total').innerText.replace('$', ''),
+            items: carrito
+        };
+
+        try {
+            const response = await fetch('guardar_orden.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderData)
+            });
+            const result = await response.json();
+            console.log('Orden guardada:', result);
+        } catch (error) {
+            console.error('Error al guardar la orden:', error);
+        }
+
         carrito = []; 
         renderCart(); 
-        closeCart(); // <-- usa closeCart() en lugar de solo quitar la clase
+        closeCart(); 
     });
 }
 }).render('#paypal-button-container');
@@ -742,6 +755,21 @@ function showQuickViewMejorado(id) {
     document.body.style.overflow = 'hidden';
 }
 
+// Función para cargar productos desde la base de datos
+async function loadProductsFromDB() {
+    try {
+        const response = await fetch('obtener_productos.php');
+        const data = await response.json();
+        if (Array.isArray(data)) {
+            productos = data; // Actualizar el array global
+            renderizarProductosMejorado(productos);
+        }
+    } catch (error) {
+        console.error('Error cargando productos:', error);
+        mostrarNotificacion('Error al cargar productos', 'error');
+    }
+}
+
 // 14. INICIALIZACIÓN (MODIFICADA PARA INCLUIR MEJORAS)
 window.onload = function() {
     // Tus funciones originales
@@ -764,7 +792,7 @@ window.onload = function() {
     agregarEstilosDinamicos();
     crearVistaRapidaMejorado();
     crearFiltrosMejorados();
-    renderizarProductosMejorado(productos); // Reemplaza a loadProducts()
+    loadProductsFromDB(); // Ahora carga desde la BD
     
     // Asegurar scroll
     document.body.style.overflow = "auto";
@@ -775,7 +803,7 @@ window.onload = function() {
     agregarEstilosNavegacionHover();
     crearNavegacionHover();
     
-    console.log(' KIVY STREET - Versión Mejorada cargada!');
+    console.log(' KIVY STREET - Versión Mejorada cargada con Backend!');
 };
 
 // ============================================
