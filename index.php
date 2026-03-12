@@ -7,43 +7,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;400;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="estiloss.css">
-    <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD"></script>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo">KIVY<span>STREET</span></div>
-        <ul class="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="acercadenosotros.html">Nosotros</a></li>
-            <li class="dropdown">
-                <a href="#productos" id="coleccion-link">Colección</a>
-                <ul class="dropdown-menu" id="coleccion-menu">
-                    <li><a href="#productos-hombre">Productos Hombre</a></li>
-                    <li><a href="productosMujer.html">Productos Mujer</a></li>
-                    <li><a href="#productos-joven">Productos Joven</a></li>
-                    <li><a href="#nuevos-modelos">Nuevos Modelos</a></li>
-                </ul>
-            </li>
-        </ul>
-        <div class="nav-icons">
-            <!-- Ícono de usuario con menú desplegable (Font Awesome) -->
-            <div class="user-menu-container">
-                <div id="user-icon" class="user-icon" title="Usuario">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div id="user-dropdown" class="user-dropdown">
-                    <a href="#" class="dropdown-item" onclick="showLoginModal()">Iniciar Sesión</a>
-                    <a href="#" class="dropdown-item" onclick="showRegisterModal()">Crear Cuenta</a>
-                </div>
-            </div>
-            
-            <!-- Ícono de carrito con contador (Font Awesome) -->
-            <div id="cart-icon" class="cart-icon">
-                <i class="fas fa-shopping-cart"></i>
-                <small id="cart-count" class="cart-count">0</small>
-            </div>
-        </div>
-    </nav>
+    <?php include 'navbar.php'; ?>
 
     <section class="hero" id="home">
         <div class="hero-image-carousel" id="hero-carousel"></div>
@@ -107,37 +73,7 @@
                 <span>Total:</span>
                 <span id="cart-total">$0.00</span>
             </div>
-            <div id="paypal-button-container"></div>
-        </div>
-    </div>
-
-    <!-- Modal de Login -->
-    <div id="login-modal" class="modal">
-        <div class="modal-content">
-            <div class="logo" style="margin-bottom: 20px;">KIVY<span>STREET</span></div>
-            <h2 class="section-title" style="font-size: 1.2rem; margin-bottom: 10px;">INICIAR SESIÓN</h2>
-            <p style="color: #888; margin-bottom: 20px; font-size: 0.8rem;">Accede a tu cuenta</p>
-            <form id="login-form">
-                <input type="email" name="email" placeholder="Correo Electrónico" required>
-                <input type="password" name="password" placeholder="Contraseña" required>
-                <button type="submit" class="checkout-btn">ENTRAR A LA WEB</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modal de Registro -->
-    <div id="register-modal" class="modal">
-        <div class="register-content">
-            <div class="logo" style="margin-bottom: 20px;">KIVY<span>STREET</span></div>
-            <h2 class="section-title" style="font-size: 1.2rem; margin-bottom: 10px;">CREAR CUENTA</h2>
-            <p style="color: #888; margin-bottom: 20px; font-size: 0.8rem;">Únete a la comunidad KIVY</p>
-            <form id="register-form">
-                <input type="text" name="nombre" placeholder="Nombre Completo" required>
-                <input type="email" name="email" placeholder="Correo Electrónico" required>
-                <input type="password" name="password" placeholder="Contraseña (mínimo 6 caracteres)" required>
-                <input type="password" name="confirm_password" placeholder="Confirmar Contraseña" required>
-                <button type="submit" class="checkout-btn">CREAR CUENTA</button>
-            </form>
+            <div id="wallet_container"></div>
         </div>
     </div>
 

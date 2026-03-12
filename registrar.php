@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $password_hash = password_hash($password, PASSWORD_DEFAULT);
                 
                 // Insertar usuario
-                $stmt = $conexion->prepare("INSERT INTO usuarios (nombre_completo, email, password) VALUES (?, ?, ?)");
+                $stmt = $conexion->prepare("INSERT INTO usuarios (nombre_completo, email, password, rol) VALUES (?, ?, ?, 'cliente')");
                 $stmt->execute([$nombre, $email, $password_hash]);
                 
                 echo json_encode([

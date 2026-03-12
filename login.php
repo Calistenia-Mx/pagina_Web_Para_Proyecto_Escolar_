@@ -26,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['usuario_id'] = $usuario['id'];
                 $_SESSION['usuario_nombre'] = $usuario['nombre_completo'];
                 $_SESSION['usuario_email'] = $usuario['email'];
+                $_SESSION['usuario_rol'] = $usuario['rol'] ?? 'cliente';
                 $_SESSION['logged_in'] = true;
                 
                 echo json_encode([
@@ -33,7 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'message' => 'Inicio de sesión exitoso',
                     'usuario' => [
                         'nombre' => $usuario['nombre_completo'],
-                        'email' => $usuario['email']
+                        'email' => $usuario['email'],
+                        'rol' => $_SESSION['usuario_rol']
                     ]
                 ]);
             } else {

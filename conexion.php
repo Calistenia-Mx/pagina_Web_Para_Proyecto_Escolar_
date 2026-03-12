@@ -16,10 +16,28 @@ try {
         nombre_completo VARCHAR(100) NOT NULL,
         email VARCHAR(100) UNIQUE NOT NULL,
         password VARCHAR(255) NOT NULL,
+        rol VARCHAR(20) DEFAULT 'cliente',
         fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
 
     $conexion->exec($sql);
+
+    // Asegurar que la columna 'rol' existe (para bases de datos ya creadas)
+    try {
+        $conexion->exec("ALTER TABLE usuarios ADD COLUMN rol VARCHAR(20) DEFAULT 'cliente' AFTER password");
+    } catch(PDOException $e) {
+        // La columna ya existe, ignoramos el error
+    }
+
+    // Insertar admin por defecto si no existe
+    $admin_email = 'admin@kivystreet.com';
+    $check_admin = $conexion->prepare("SELECT id FROM usuarios WHERE email = ?");
+    $check_admin->execute([$admin_email]);
+    if ($check_admin->rowCount() == 0) {
+        $admin_pass = password_hash('admin123', PASSWORD_DEFAULT);
+        $stmt = $conexion->prepare("INSERT INTO usuarios (nombre_completo, email, password, rol) VALUES (?, ?, ?, ?)");
+        $stmt->execute(['Admin Kivy', $admin_email, $admin_pass, 'admin']);
+    }
 
     // Crear tabla 'productos'
     $sql_productos = "CREATE TABLE IF NOT EXISTS productos (
@@ -48,15 +66,17 @@ try {
     $check_productos = $conexion->query("SELECT COUNT(*) FROM productos");
     if ($check_productos->fetchColumn() == 0) {
         $sql_seeds = "INSERT INTO productos (nombre, precio, imagen, stock, categoria) VALUES
-            ('KIVY Black Snapback', 35.00, 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=500', 15, 'Snapback'),
-            ('Urban Crimson', 29.00, 'https://images.unsplash.com/photo-1521369909029-2afed882baee?w=500', 20, 'Urban'),
-            ('Street Ghost', 40.00, 'imagenes/images 5.jpg', 10, 'Premium'),
-            ('Night Vibe Beanie', 22.00, 'https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=500', 25, 'Beanie'),
-            ('KIVY Logo Tee', 25.00, 'imagenes/images 2.jpg', 30, 'Apparel'),
-            ('Streetwear Special', 45.00, 'imagenes/images 3.jpg', 5, 'Limited'),
+            ('KIVY Black Snapback', 35.00, 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=500', 15, 'Hombre'),
+            ('Urban Crimson', 29.00, 'https://images.unsplash.com/photo-1521369909029-2afed882baee?w=500', 20, 'Hombre'),
+            ('Street Ghost', 40.00, 'imagenes/images 5.jpg', 10, 'Nuevos'),
+            ('Night Vibe Beanie', 22.00, 'https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=500', 25, 'Jovenes'),
+            ('KIVY Logo Tee', 25.00, 'imagenes/images 2.jpg', 30, 'Nuevos'),
+            ('Streetwear Special', 45.00, 'imagenes/images 3.jpg', 5, 'Nuevos'),
             ('KIVY Pink Cap', 32.00, 'https://images.unsplash.com/photo-1575032617751-6ddec2089882?w=500', 12, 'Mujer'),
             ('Urban Rose Beanie', 24.00, 'https://images.unsplash.com/photo-1629135017122-0e3181822c9f?w=500', 18, 'Mujer'),
-            ('Street Chic Snapback', 38.00, 'https://images.unsplash.com/photo-1556306535-0f09a537f0a3?w=500', 8, 'Mujer')";
+            ('Street Chic Snapback', 38.00, 'https://images.unsplash.com/photo-1556306535-0f09a537f0a3?w=500', 8, 'Mujer'),
+            ('Young Spirit Cap', 28.00, 'https://images.unsplash.com/photo-1521369909029-2afed882baee?w=500', 15, 'Jovenes'),
+            ('Classic Executive', 45.00, 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=500', 10, 'Hombre')";
         $conexion->exec($sql_seeds);
     }
 

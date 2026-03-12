@@ -57,6 +57,7 @@ function renderCart() {
     });
     if(cartCount) cartCount.innerText = carrito.length;
     if(cartTotal) cartTotal.innerText = `$${total.toFixed(2)}`;
+    renderMercadoPago();
 }
 
 function removeFromCart(i) {
@@ -74,39 +75,36 @@ function closeCart() {
     if(cartOverlay) cartOverlay.classList.remove('active');
 }
 
-// 3. PAYPAL
-if(document.getElementById('paypal-button-container')) {
-    paypal.Buttons({
-        style: { color: 'black', shape: 'rect' },
-        createOrder: function(data, actions) {
-            const totalVal = cartTotal.innerText.replace('$', '');
-            if(parseFloat(totalVal) <= 0) {
-                mostrarNotificacion('El carrito está vacío', 'error');
-                return;
-            }
-            return actions.order.create({
-                purchase_units: [{ amount: { value: totalVal, currency_code: 'USD' } }]
-            });
-        },
-        onApprove: function(data, actions) {
-            return actions.order.capture().then(async (details) => {
-                mostrarNotificacion('¡Compra Exitosa!', 'success');
-                const orderData = {
-                    paypal_order_id: details.id,
-                    total: cartTotal.innerText.replace('$', ''),
-                    items: carrito
-                };
-                await fetch('guardar_orden.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(orderData)
-                });
-                carrito = [];
-                renderCart();
-                closeCart();
+// 3. MERCADO PAGO
+const mp = new MercadoPago('APP_USR-f2d11c81-8b2b-4d44-9c8a-7889e49a8b9e'); // Public Key de prueba o real
+
+function renderMercadoPago() {
+    const container = document.getElementById('wallet_container');
+    if(!container) return;
+    container.innerHTML = '';
+    
+    const totalVal = cartTotal.innerText.replace('$', '');
+    if(parseFloat(totalVal) <= 0) return;
+
+    // Crear botón de Mercado Pago
+    const btn = document.createElement('button');
+    btn.className = 'checkout-btn';
+    btn.innerText = 'PAGAR CON MERCADO PAGO';
+    btn.onclick = async () => {
+        const res = await fetch('crear_preferencia.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ items: carrito, total: totalVal })
+        });
+        const preference = await res.json();
+        if(preference.id) {
+            mp.checkout({
+                preference: { id: preference.id },
+                autoOpen: true
             });
         }
-    }).render('#paypal-button-container');
+    };
+    container.appendChild(btn);
 }
 
 // 4. USUARIOS
@@ -128,10 +126,15 @@ async function checkSession() {
         const data = await res.json();
         if(data.loggedIn) {
             userIcon.innerHTML = `👋`;
-            userDropdown.innerHTML = `
-                <a href="admin.php" class="dropdown-item">Panel Admin</a>
-                <a href="#" class="dropdown-item" onclick="logout()">Cerrar Sesión</a>
-            `;
+            let dropdownHTML = '';
+            
+            // Si es admin, mostrar link al panel
+            if(data.usuario.rol === 'admin') {
+                dropdownHTML += `<a href="admin.php" class="dropdown-item">Panel Admin</a>`;
+            }
+            
+            dropdownHTML += `<a href="#" class="dropdown-item" onclick="logout()">Cerrar Sesión</a>`;
+            userDropdown.innerHTML = dropdownHTML;
         }
     } catch(e) {}
 }
@@ -147,4 +150,53 @@ document.addEventListener('DOMContentLoaded', () => {
     if(cartOverlay) cartOverlay.onclick = closeCart;
     if(document.getElementById('cart-icon')) document.getElementById('cart-icon').onclick = openCart;
     checkSession();
+
+    // HANDLERS DE FORMULARIOS
+    const loginForm = document.getElementById('login-form');
+    if(loginForm) {
+        loginForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(loginForm);
+            const res = await fetch('login.php', { method: 'POST', body: formData });
+            const data = await res.json();
+            if(data.success) {
+                mostrarNotificacion(data.message, 'success');
+                setTimeout(() => location.reload(), 1000);
+            } else {
+                mostrarNotificacion(data.errors.join(', '), 'error');
+            }
+        };
+    }
+
+    const registerForm = document.getElementById('register-form');
+    if(registerForm) {
+        registerForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(registerForm);
+            const res = await fetch('registrar.php', { method: 'POST', body: formData });
+            const data = await res.json();
+            if(data.success) {
+                mostrarNotificacion(data.message, 'success');
+                closeModals();
+            } else {
+                mostrarNotificacion(data.errors.join(', '), 'error');
+            }
+        };
+    }
 });
+
+// Google Login Callback
+async function handleCredentialResponse(response) {
+    const res = await fetch('login_google.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ credential: response.credential })
+    });
+    const data = await res.json();
+    if(data.success) {
+        mostrarNotificacion(data.message, 'success');
+        setTimeout(() => location.reload(), 1500);
+    } else {
+        mostrarNotificacion(data.message, 'error');
+    }
+}
